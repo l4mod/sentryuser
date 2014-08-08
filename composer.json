@@ -1,0 +1,26 @@
+{
+    "name": "amitavroy/sentryuser",
+    "description": "",
+    "authors": [
+        {
+            "name": "Amitav Roy",
+            "email": "reachme@amitavroy.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "illuminate/support": "4.1.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations",
+            "src/models",
+            "src/helpers",
+            "src/controllers"
+        ],
+        "psr-0": {
+            "Amitavroy\\Sentryuser\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

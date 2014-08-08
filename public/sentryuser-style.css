@@ -1,0 +1,12 @@
+@CHARSET "ISO-8859-1";
+
+.user-image img {
+	margin-top: 5px;
+	-moz-border-radius: 20px;
+	-webkit-border-radius: 20px;
+	border-radius: 20px; /* future proofing */
+	-khtml-border-radius: 20px; /* for old Konqueror browsers */
+}
+.profile-image img {
+	
+}
