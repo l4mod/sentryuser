@@ -1,6 +1,8 @@
 {
     "name": "l4mod/sentryuser",
     "description": "Sentry user is an extension of the Sentry module. This module will add extra features like user management interface, permission matrix etc.",
+    "license": "MIT",
+    "keywords": ["laravel", "users", "permissions"],
     "authors": [
         {
             "name": "Amitav Roy",
@@ -9,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "illuminate/support": "4.1.*"
+        "laravel/framework": "~4.0"
     },
     "autoload": {
         "classmap": [
