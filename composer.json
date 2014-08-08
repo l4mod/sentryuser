@@ -1,6 +1,6 @@
 {
-    "name": "amitavroy/sentryuser",
-    "description": "",
+    "name": "l4mod/sentryuser",
+    "description": "Sentry user is an extension of the Sentry module. This module will add extra features like user management interface, permission matrix etc.",
     "authors": [
         {
             "name": "Amitav Roy",
