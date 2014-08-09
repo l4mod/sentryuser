@@ -21,7 +21,7 @@ class SentryPermission extends Eloquent
         $query->join('permissions', 'permissions.permission_id', '=', 'permission_in_group.permission_id');
         $query->join('groups', 'groups.id', '=', 'permission_in_group.group_id');
         $query->orderBy('permissions.permission_group_name', 'asc');
-        $query->orderBy('permissions.permission_name', 'asc');
+        $query->orderBy('permissions.permission_id', 'asc');
         $data = $query->get();
         
         return $data;

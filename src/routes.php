@@ -21,6 +21,9 @@ Route::group(array(
     // edit profile section
     Route::get('edit-profile', 'UserController@handleEditProfile');
     Route::post('save-profile', 'UserController@handleSaveProfile');
+
+    // user section
+    Route::get('user/list', 'UserController@handleUserListing');
     
     // the permission matrix section
     Route::get('user/permission/list', 'PermissionController@handlePermissionListing');

@@ -27,6 +27,7 @@ class CreateDefaultUsers extends Migration {
                     'create_users' => 1,
                     'edit_users' => 1,
                     'delete_users' => 1,
+                    'manage_users' => 1,
                     'manage_permissions' => 1,
                 ),
             ));
@@ -49,6 +50,7 @@ class CreateDefaultUsers extends Migration {
                     'create_users' => 1,
                     'edit_users' => 1,
                     'delete_users' => 0,
+                    'manage_users' => 0,
                     'manage_permissions' => 0,
                 ),
             ));

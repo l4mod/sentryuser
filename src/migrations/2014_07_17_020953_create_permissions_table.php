@@ -25,7 +25,6 @@ class CreatePermissionsTable extends Migration {
                 'permission_name' => 'create_users',
                 'permission_group_name' => 'Users',
             ));
-        
         DB::table('permissions')->insert(array(
                 'permission_name' => 'edit_users',
                 'permission_group_name' => 'Users',
@@ -35,10 +34,13 @@ class CreatePermissionsTable extends Migration {
                 'permission_group_name' => 'Users',
             ));
         DB::table('permissions')->insert(array(
+                'permission_name' => 'manage_users',
+                'permission_group_name' => 'Users',
+            ));
+        DB::table('permissions')->insert(array(
                 'permission_name' => 'manage_permissions',
                 'permission_group_name' => 'Users',
             ));
-
 	}
 
 	/**

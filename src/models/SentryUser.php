@@ -172,4 +172,26 @@ class SentryUser extends Eloquent
 
         return true;
     }
+
+    public function getUsers($user_id = null)
+    {
+        $arrSelect = array(
+            'u.id', 'u.email', 'u.activated', 'u.last_login', 'u.first_name', 'u.last_name',
+            'g.name as roleName'
+        );
+
+        $query = DB::table('users as u');
+
+        $query->select($arrSelect);
+
+        if ($user_id != null)
+            $query->where('u.id', $user_id);
+
+        $query->join('users_groups as ug', 'ug.user_id', '=', 'u.id');
+        $query->join('groups as g', 'g.id', '=', 'ug.group_id');
+
+        $query->orderBy('u.id', 'desc');
+
+        return $query;
+    }
 }

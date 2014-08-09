@@ -18,7 +18,12 @@
           @if(PermApi::user_has_permission('manage_permissions'))
           <li>{{ link_to('user/permission/list', 'Permissions') }}</li>
           @endif
+          @if(PermApi::user_has_permission('manage_users'))
+          <li>{{ link_to('user/list', 'Manage Users') }}</li>
+          @endif
+          @if (in_array('Amitavroy\Mailing\MailingServiceProvider', Config::get('app.providers')))
           <li>{{ link_to('mailing/list', 'Mailing List') }}</li>
+          @endif
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">

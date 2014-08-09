@@ -11,18 +11,21 @@ class UserController extends BaseController
 {
     protected $layout = 'sentryuser::master';
 
+    // return the access denied page
     public function handleAccessDeniedPage()
     {
         $this->layout->menuSkip = true;
         $this->layout->content = View::make('sentryuser::access-denied');
     }
 
+    // return the view for the login page
     public function handleLoginPage()
     {
         $this->layout->menuSkip = true;
         $this->layout->content = View::make('sentryuser::login');
     }
 
+    // this function is handling the post data from the login page
     public function handleUserAuthentication()
     {
         $username = Input::get('email');
@@ -49,25 +52,29 @@ class UserController extends BaseController
         }
     }
 
+    // return the view for the dashboard page
     public function handleUserDashboard()
     {
         $this->layout->content = View::make('sentryuser::dashboard');
     }
 
+    // handling user logout
     public function handleUserLogout()
     {
         Sentry::logout();
         GlobalHelper::setMessage('You have been logged out of the system.');
         return Redirect::to('user');
     }
-    
+
+    // returning the edit profile view
     public function handleEditProfile()
     {
         $thisUser = Session::get('userObj');
         $userData = UserHelper::getUserObj($thisUser->id);
         $this->layout->content = View::make('sentryuser::edit-profile')->with('userdata', $userData);
     }
-    
+
+    // handling the post from the edit profile form
     public function handleSaveProfile()
     {
         $postData = Input::all();
@@ -77,5 +84,18 @@ class UserController extends BaseController
         $SentryUser->editProfile($postData);
         
         return Redirect::to('edit-profile');
+    }
+
+    // returning the user listing view
+    public function handleUserListing()
+    {
+        // checking the access for the user
+        PermApi::access_check('manage_users');
+
+        $SentryUser = new SentryUser;
+
+        $users = $SentryUser->getUsers()->paginate(10);
+
+        $this->layout->content = View::make('sentryuser::user-listing')->with('users', $users);
     }
 }
