@@ -38,6 +38,12 @@ class UserHelper extends Eloquent
      */
     public static function getUserPicture()
     {
+        // if the file managed module is not present, then no point checking sessions and urls.
+        if (!in_array('Amitavroy\Filemanaged\FilemanagedServiceProvider', Config::get('app.providers')))
+        {
+            return Config::get('sentryuser::sentryuser.default-pic');
+        }
+
         if (Session::has('userObj'))
         {
             $userObj = Session::get('userObj');

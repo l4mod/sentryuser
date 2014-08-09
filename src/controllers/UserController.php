@@ -51,7 +51,7 @@ class UserController extends BaseController
 
     public function handleUserDashboard()
     {
-        $this->layout->content = "asdffsdasdsadd";
+        $this->layout->content = View::make('sentryuser::dashboard');
     }
 
     public function handleUserLogout()

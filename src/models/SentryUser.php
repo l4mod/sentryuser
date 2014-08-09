@@ -88,12 +88,14 @@ class SentryUser extends Eloquent
         $user->first_name = $postData['firstname'];
         $user->last_name = $postData['lastName'];
 
-        /*GlobalHelper::dsm(asset($postData['profileImage']));
-        GlobalHelper::dsm($postData['hiddenProfileImage'], true);*/
-        if ($postData['hiddenProfileImage'] != asset($postData['profileImage']))
+        // first check if the module is present
+        if (in_array('Amitavroy\Filemanaged\FilemanagedServiceProvider', Config::get('app.providers')))
         {
-            $destination = 'uploads/user_pic/';
-            $this->setUserProfileFromUrl($postData['profileImage'], $destination);
+            if ($postData['hiddenProfileImage'] != asset($postData['profileImage']))
+            {
+                $destination = 'uploads/user_pic/';
+                $this->setUserProfileFromUrl($postData['profileImage'], $destination);
+            }
         }
 
         if ($user->save())
