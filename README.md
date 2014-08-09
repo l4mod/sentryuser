@@ -11,6 +11,16 @@ To use this module, first we need to add the Service provider in app.php
 
 Once this is added, we need to run the migrations for this package and so a few additional tables are created and a default user with role Super Admin is created.
 
+    php artisan migrate --package l4mod/sentryuser
+
+Then to publish the configuration, you need to run the command:
+    
+    php artisan config:publish l4mod/sentryuser
+
+And finally, publish the assets for this module using this command:
+
+    php artisan asset:publish l4mod/sentryuser
+
 a) permissions b) permissision in groups.
 
 ##### Users
