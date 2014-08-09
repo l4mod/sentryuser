@@ -31,6 +31,6 @@ Route::group(array(
 
 Route::filter('checkAuth', function ()
 {
-    if (! GlobalHelper::checkAuth())
+    if (! Sentry::check())
         return Redirect::to('/');
 });
