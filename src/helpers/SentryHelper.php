@@ -1,6 +1,6 @@
 <?php
 
-class GlobalHelper {
+class SentryHelper {
 
     /**
      * This function will be used to spit out the variable dump.

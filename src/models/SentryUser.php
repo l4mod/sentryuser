@@ -105,12 +105,12 @@ class SentryUser extends Eloquent
             Event::subscribe($subscriber);
             Event::fire('sentryuser.profilechange', $user);
             
-            GlobalHelper::setMessage('Your profile details were updated');
+            SentryHelper::setMessage('Your profile details were updated');
             return true;
         }
         else
         {
-            GlobalHelper::setMessage('Your changes were not saved. Please try again', 'info');
+            SentryHelper::setMessage('Your changes were not saved. Please try again', 'info');
             return false;
         }
     }
@@ -147,7 +147,7 @@ class SentryUser extends Eloquent
         // checking if the current password is correct or not.
         if (!$this->checkUserCurrentPassword($currentPass))
         {
-            GlobalHelper::setMessage('Your current password does not match.', 'info');
+            SentryHelper::setMessage('Your current password does not match.', 'info');
             return false;
         }
         else
