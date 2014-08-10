@@ -10,7 +10,7 @@
     <title>Welcome to Cybertron</title>
     @endif
     <!-- Bootstrap -->
-    {{ HTML::style('assets/css/bootstrap-yeti.min.css') }}
+    {{ HTML::style('packages/l4mod/sentryuser/bootstrap-ubuntu.min.css') }}
     {{ HTML::style('packages/l4mod/sentryuser/sentryuser-style.css') }}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -44,9 +44,9 @@
 
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 @section('scripts')
-<script type="text/javascript" src="{{ asset('assets/js/jquery-1.11.1.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/js/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/jquery-1.11.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/scripts.js') }}"></script>
 @show
 </body>
 </html>
