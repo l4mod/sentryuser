@@ -30,22 +30,22 @@ class SentryUser extends Eloquent
             
             return true;
         } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
-            GlobalHelper::setMessage('Login field is required.', 'warning');
+            SentryHelper::setMessage('Login field is required.', 'warning');
         } catch (Cartalyst\Sentry\Users\PasswordRequiredException $e) {
-            GlobalHelper::setMessage('Password field is required.', 'warning');
+            SentryHelper::setMessage('Password field is required.', 'warning');
         } catch (Cartalyst\Sentry\Users\WrongPasswordException $e) {
-            GlobalHelper::setMessage('Wrong password, try again.', 'warning');
+            SentryHelper::setMessage('Wrong password, try again.', 'warning');
         } catch (Cartalyst\Sentry\Users\UserNotFoundException $e) {
-            GlobalHelper::setMessage('User was not found.', 'warning');
+            SentryHelper::setMessage('User was not found.', 'warning');
         } catch (Cartalyst\Sentry\Users\UserNotActivatedException $e) {
-            GlobalHelper::setMessage('User is not activated.', 'warning');
+            SentryHelper::setMessage('User is not activated.', 'warning');
         }        
 
         // The following is only required if the throttling is enabled
         catch (Cartalyst\Sentry\Throttling\UserSuspendedException $e) {
-            GlobalHelper::setMessage('User is suspended.', 'warning');
+            SentryHelper::setMessage('User is suspended.', 'warning');
         } catch (Cartalyst\Sentry\Throttling\UserBannedException $e) {
-            GlobalHelper::setMessage('User is banned.', 'warning');
+            SentryHelper::setMessage('User is banned.', 'warning');
         }
     }
     
@@ -140,7 +140,7 @@ class SentryUser extends Eloquent
         // although check in JS, still at PHP end checking if the two password match.
         if ($newPass != $confPass)
         {
-            GlobalHelper::setMessage('The two password does not match.', 'info');
+            SentryHelper::setMessage('The two password does not match.', 'info');
             return false;
         }
         

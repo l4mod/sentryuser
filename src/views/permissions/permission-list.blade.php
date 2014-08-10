@@ -69,6 +69,13 @@
 				<h1>Add new role</h1>
 				{{ Form::open(array('url' => 'user/role/add', 'role' =>
 				'form')) }}
+                <div class="form-group">
+                    <input type="text" class="form-control" id="roleName"
+                           name="role_name" placeholder="Enter the new role name">
+                </div>
+                <input type="submit" class="btn btn-success" name="save"
+                       value="Save" />
+                {{ Form::close() }}
 			</div>
 		</div>
 	</div>

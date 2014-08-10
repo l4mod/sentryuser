@@ -36,21 +36,30 @@ class PermissionController extends BaseController
 
         if ($SentryPermission->updatePermissionMapping($postData))
         {
-            GlobalHelper::setMessage('Permissions have been updated.');
+            SentryHelper::setMessage('Permissions have been updated.');
             return Redirect::to('user/permission/list');
         }
         else 
         {
-            GlobalHelper::setMessage('Not updated because of some problems.', 'warning');
+            SentryHelper::setMessage('Not updated because of some problems.', 'warning');
             return Redirect::to('user/permission/list');
         }
     }
     
     public function handlePermissionAdd()
     {
-//         dd(Input::all());
         $SentryPermission = new SentryPermission;
         $SentryPermission->addPermission(Input::all());
+        
+        return Redirect::to('user/permission/list');
+    }
+
+    public function handleRoleAdd()
+    {
+        $roleName = Input::get('role_name');
+
+        $SentryPermission = new SentryPermission;
+        $SentryPermission->addNewRole($roleName);
         
         return Redirect::to('user/permission/list');
     }

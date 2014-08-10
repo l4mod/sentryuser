@@ -35,7 +35,7 @@ class UserController extends BaseController
 
         if ($SentryUser->authenticateUser($username, $password))
         {
-            GlobalHelper::setMessage('Login successful', 'success');
+            SentryHelper::setMessage('Login successful', 'success');
 
             /* firing the login event*/
             $user = Session::get('userObj'); // getting the user object from session to pass to the event.
@@ -62,7 +62,7 @@ class UserController extends BaseController
     public function handleUserLogout()
     {
         Sentry::logout();
-        GlobalHelper::setMessage('You have been logged out of the system.');
+        SentryHelper::setMessage('You have been logged out of the system.');
         return Redirect::to('user');
     }
 
