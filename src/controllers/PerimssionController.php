@@ -79,4 +79,34 @@ class PermissionController extends BaseController
 
         return Redirect::to('user/permission/list');
     }
+
+    public function handleRoleEdit($roleId)
+    {
+        if ($roleId == 1)
+        {
+            SentryHelper::setMessage('This role cannot be edited');
+            return Redirect::to('user/permission/list');
+        }
+
+        $role = DB::table('groups')->where('id', $roleId)->first();
+        $this->layout->content = View::make('sentryuser::permissions.edit-role')->with('role', $role);
+    }
+
+    public function handleRoleUpdate()
+    {
+        $roleName = Input::get('role');
+        $roleId = Input::get('roleId');
+
+        $SentryPermission = new SentryPermission;
+        if ($SentryPermission->updateRole($roleId, $roleName))
+        {
+            SentryHelper::setMessage('Role updated');
+        }
+        else
+        {
+            SentryHelper::setMessage('Role not updated', 'warning');
+        }
+
+        return Redirect::to('user/role/edit/' . $roleId);
+    }
 }

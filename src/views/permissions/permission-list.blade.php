@@ -20,7 +20,7 @@
 	<div class="col-md-12">
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div class="tab-pane" id="home">
+			<div class="tab-pane active" id="home">
 				<h3>Assign permissions</h3>
 				{{ Form::open(array('url' => 'user/permission/save', 'role' =>
 				'form')) }}
@@ -68,10 +68,11 @@
 
 			</div>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>Add New Role</h3>
-                    <div class="tab-pane active" id="add-role">
+            <div class="tab-pane" id="add-role">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h3>Add New Role</h3>
+
                         {{ Form::open(array('url' => 'user/role/add', 'role' =>
                         'form')) }}
                         <div class="form-group">
@@ -82,17 +83,19 @@
                                value="Save" />
                         {{ Form::close() }}
                     </div>
-                </div>
-                <div class="col-md-4 col-md-push-4">
-                    <h3>Manage Role</h3>
-                    <ul class="list-group">
-                        @foreach ($groups as $group)
-                        <li class="list-group-item">
-                            <span class="pull-right remove fa fa-trash-o" id="group-{{$group->id}}"></span>
-                            <span class="pull-right edit fa fa-edit"></span>
-                            {{$group->name}}</li>
-                        @endforeach
-                    </ul>
+                    <div class="col-md-4 col-md-push-4">
+                        <h3>Manage Role</h3>
+                        <ul class="list-group">
+                            @foreach ($groups as $group)
+                            <li class="list-group-item">
+                                @if ($group->id != 1)
+                                <span class="pull-right remove fa fa-trash-o" id="group-{{$group->id}}"></span>
+                                <a href="{{url('user/role/edit/'.$group->id)}}"><span class="pull-right edit fa fa-edit"></span></a>
+                                @endif
+                                {{$group->name}}</li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
             </div>
 

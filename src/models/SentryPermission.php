@@ -257,7 +257,7 @@ class SentryPermission extends Eloquent
     public function addNewRole($roleName)
     {
         // check if the group already exist
-        if (!$this->checkIfGroupExist($roleName))
+        if (!$this->checkIfRoleExist($roleName))
         {
             SentryHelper::setMessage('Group name already present', 'warning');
             return false;
@@ -304,7 +304,7 @@ class SentryPermission extends Eloquent
      * @param $roleName
      * @return bool
      */
-    private function checkIfGroupExist($roleName)
+    private function checkIfRoleExist($roleName)
     {
         $query = DB::table('groups')->where('name', $roleName)->first();
 
@@ -312,5 +312,14 @@ class SentryPermission extends Eloquent
             return false;
         else
             return true;
+    }
+
+    public function updateRole($roleId, $roleName)
+    {
+        DB::table('groups')->where('id', $roleId)->update(array(
+                'name' => $roleName
+            ));
+
+        return true;
     }
 }

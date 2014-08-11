@@ -30,6 +30,8 @@ Route::group(array(
     Route::post('user/permission/save', 'PermissionController@handlePermissionSave');
     Route::post('user/permission/add', 'PermissionController@handlePermissionAdd');
     Route::post('user/role/add', 'PermissionController@handleRoleAdd');
+    Route::get('user/role/edit/{id}', 'PermissionController@handleRoleEdit');
+    Route::post('user/role/update', 'PermissionController@handleRoleUpdate');
 });
 
 Route::filter('checkAuth', function ()
