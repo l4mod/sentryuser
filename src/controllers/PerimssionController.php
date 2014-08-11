@@ -11,6 +11,10 @@ class PermissionController extends BaseController
 {
     protected $layout = 'sentryuser::master';
 
+    /**
+     * Main function to handle the three tabbed page
+     * Permission assignment, Permission management and Role management
+     */
     public function handlePermissionListing()
     {
         PermApi::access_check('manage_permissions');
@@ -29,6 +33,10 @@ class PermissionController extends BaseController
             ->with('permissions', $permissions);
     }
 
+    /**
+     * Post handler for saving permissions
+     * @return mixed
+     */
     public function handlePermissionSave()
     {
         $postData = Input::all();
@@ -45,7 +53,11 @@ class PermissionController extends BaseController
             return Redirect::to('user/permission/list');
         }
     }
-    
+
+    /**
+     * Post handler for Adding permissions.
+     * @return mixed
+     */
     public function handlePermissionAdd()
     {
         $SentryPermission = new SentryPermission;
@@ -54,13 +66,17 @@ class PermissionController extends BaseController
         return Redirect::to('user/permission/list');
     }
 
+    /**
+     * Post handler for adding new role.
+     * @return mixed
+     */
     public function handleRoleAdd()
     {
         $roleName = Input::get('role_name');
 
         $SentryPermission = new SentryPermission;
         $SentryPermission->addNewRole($roleName);
-        
+
         return Redirect::to('user/permission/list');
     }
 }

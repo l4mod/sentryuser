@@ -1,25 +1,27 @@
 @section('content')
 <div class="row">
 	<div class="col-md-12">
-		<!--<h1>Permission table</h1>-->
+		<h1>Permission Matrix</h1>
 	</div>
 </div>
 
 <div class="row">
-	<div class="col-md-12">
-		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist">
-			<li class="active"><a href="#home" role="tab" data-toggle="tab">Permission
-					List</a></li>
-			<li><a href="#add-permission" role="tab" data-toggle="tab">Add
-					Permission</a></li>
-			<li><a href="#add-role" role="tab" data-toggle="tab">Add Role</a></li>
-		</ul>
+    <div class="col-md-12">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#home" role="tab" data-toggle="tab">Permissions Assignment</a></li>
+            <li><a href="#add-permission" role="tab" data-toggle="tab">Manage Permissions</a></li>
+            <li><a href="#add-role" role="tab" data-toggle="tab">Manage Roles</a></li>
+        </ul>
+    </div>
+</div>
 
+<div class="row">
+	<div class="col-md-12">
 		<!-- Tab panes -->
 		<div class="tab-content">
-			<div class="tab-pane active" id="home">
-				<h1>Manage your permissions</h1>
+			<div class="tab-pane" id="home">
+				<h3>Assign permissions</h3>
 				{{ Form::open(array('url' => 'user/permission/save', 'role' =>
 				'form')) }}
 				<table class="table table-bordered">
@@ -54,7 +56,7 @@
 					value="Save" /> {{ Form::close() }}
 			</div>
 			<div class="tab-pane" id="add-permission">
-				<h1>Add a new permission</h1>
+				<h3>Manage Permissions</h3>
 				{{ Form::open(array('url' => 'user/permission/add', 'role' =>
 				'form')) }}
 				<div class="form-group">
@@ -65,18 +67,35 @@
 					value="Save" /> {{ Form::close() }}
 
 			</div>
-			<div class="tab-pane" id="add-role">
-				<h1>Add new role</h1>
-				{{ Form::open(array('url' => 'user/role/add', 'role' =>
-				'form')) }}
-                <div class="form-group">
-                    <input type="text" class="form-control" id="roleName"
-                           name="role_name" placeholder="Enter the new role name">
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Add New Role</h3>
+                    <div class="tab-pane active" id="add-role">
+                        {{ Form::open(array('url' => 'user/role/add', 'role' =>
+                        'form')) }}
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="roleName"
+                                   name="role_name" placeholder="Enter the new role name">
+                        </div>
+                        <input type="submit" class="btn btn-success" name="save"
+                               value="Save" />
+                        {{ Form::close() }}
+                    </div>
                 </div>
-                <input type="submit" class="btn btn-success" name="save"
-                       value="Save" />
-                {{ Form::close() }}
-			</div>
+                <div class="col-md-4 col-md-push-4">
+                    <h3>Manage Role</h3>
+                    <ul class="list-group">
+                        @foreach ($groups as $group)
+                        <li class="list-group-item">
+                            <span class="pull-right remove fa fa-trash-o" id="group-{{$group->id}}"></span>
+                            <span class="pull-right edit fa fa-edit"></span>
+                            {{$group->name}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+
 		</div>
 	</div>
 </div>
