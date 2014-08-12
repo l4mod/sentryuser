@@ -7,7 +7,7 @@
     @if (isset($pageTitle))
     <title>{{ $pageTitle }}</title>
     @else
-    <title>{{ Config::get('sentryuser::sentryuser.site-title') }}</title>
+    <title>{{ Config::get('packages/l4mod/sentryuser/sentryuser.site-title') }}</title>
     @endif
     <!-- Bootstrap -->
     {{ HTML::style('packages/l4mod/sentryuser/bootstrap-ubuntu.min.css') }}
@@ -26,11 +26,11 @@
 </head>
 <body>
 @if (!isset($menuSkip))
-    @if (Config::get('sentryuser::sentryuser.nav-tpl') == '')
-        @include('sentryuser::nav')
-    @else
-        @include(Config::get('sentryuser::sentryuser.nav-tpl'))
-    @endif
+@if (Config::get('packages/l4mod/sentryuser/sentryuser.nav-tpl') == '')
+@include('sentryuser::nav')
+@else
+@include(Config::get('packages/l4mod/sentryuser/sentryuser.nav-tpl'))
+@endif
 @endif
 <div class="container">
     @if (Session::get('message'))
@@ -43,7 +43,7 @@
     <div class="row">
         <div class="col-md-12">
             @if (!isset($menuSkip))
-                @include('sentryuser::secondary-menu')
+            @include('sentryuser::secondary-menu')
             @endif
         </div>
     </div>
