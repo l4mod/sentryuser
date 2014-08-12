@@ -17,9 +17,9 @@ class UserController extends BaseController
      */
     public function __construct()
     {
-        if (Config::get('sentryuser::sentryuser.master-tpl') != '')
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
         {
-            $this->layout = Config::get('sentryuser::sentryuser.master-tpl');
+            $this->layout = Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl');
         }
     }
 
