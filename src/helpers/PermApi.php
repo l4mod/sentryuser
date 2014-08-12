@@ -11,7 +11,7 @@ class PermApi
     public static function user_has_permission($permissionName)
     {
         $user = Sentry::getUser();
-        $superAdmin = Sentry::findGroupById(1);
+        $superAdmin = Sentry::findGroupById(1); // hard coded to get super admin
 
         // check if super admin, bypass has access check
         if($user->inGroup($superAdmin))

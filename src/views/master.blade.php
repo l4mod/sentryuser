@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @if (isset($pageTitle))
-    <title>Cybertron | {{ $pageTitle }}</title>
+    <title>{{ $pageTitle }}</title>
     @else
-    <title>Welcome to Cybertron</title>
+    <title>{{ Config::get('sentryuser::sentryuser.site-title') }}</title>
     @endif
     <!-- Bootstrap -->
     {{ HTML::style('packages/l4mod/sentryuser/bootstrap-ubuntu.min.css') }}
@@ -26,7 +26,11 @@
 </head>
 <body>
 @if (!isset($menuSkip))
-@include('sentryuser::nav')
+    @if (Config::get('sentryuser::sentryuser.nav-tpl') == '')
+        @include('sentryuser::nav')
+    @else
+        @include(Config::get('sentryuser::sentryuser.nav-tpl'))
+    @endif
 @endif
 <div class="container">
     @if (Session::get('message'))
@@ -36,6 +40,13 @@
         </div>
     </div>
     @endif
+    <div class="row">
+        <div class="col-md-12">
+            @if (!isset($menuSkip))
+                @include('sentryuser::secondary-menu')
+            @endif
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             @yield('content')

@@ -12,6 +12,18 @@ class PermissionController extends BaseController
     protected $layout = 'sentryuser::master';
 
     /**
+     * Setting the layout of the controller to something else
+     * if the configuration is present.
+     */
+    public function __construct()
+    {
+        if (Config::get('sentryuser::sentryuser.master-tpl') != '')
+        {
+            $this->layout = Config::get('sentryuser::sentryuser.master-tpl');
+        }
+    }
+
+    /**
      * Main function to handle the three tabbed page
      * Permission assignment, Permission management and Role management
      */

@@ -8,24 +8,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      {{ link_to('user/dashboard', 'Cybetron', array('class' => 'navbar-brand')) }}
+      {{ link_to('user/dashboard', 'L4 Mod :: Sentry User', array('class' => 'navbar-brand')) }}
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          @if(PermApi::user_has_permission('manage_permissions'))
-          <li>{{ link_to('user/permission/list', 'Permissions') }}</li>
-          @endif
-          @if(PermApi::user_has_permission('manage_users'))
-          <li>{{ link_to('user/list', 'Manage Users') }}</li>
-          @endif
-          @if (in_array('Amitavroy\Mailing\MailingServiceProvider', Config::get('app.providers')))
-          <li>{{ link_to('mailing/list', 'Mailing List') }}</li>
-          @endif
-        </li>
-      </ul>
       <ul class="nav navbar-nav navbar-right">
         <span class="user-image"><img src="{{asset(UserHelper::getUserPicture())}}" alt="" class="pull-left" width="35" height="35" /></span>
         <li class="dropdown">
