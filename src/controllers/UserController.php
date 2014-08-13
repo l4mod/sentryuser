@@ -113,19 +113,26 @@ class UserController extends BaseController
 
     public function handleUserAdd()
     {
-        $this->layout->content = View::make('sentryuser::add-user');
+        // checking the access for the user
+        PermApi::access_check('create_users');
+
+        // get all sentry groups
+        $roles = Sentry::findAllGroups();
+
+        $this->layout->content = View::make('sentryuser::add-user')->with('roles', $roles);
     }
 
     public function handleUserSave()
     {
-        SentryHelper::dsm(Input::all(), true);
+//        SentryHelper::dsm(Input::all(), true);
+
         $postData = Input::all();
-        $newUser = Sentry::createUser(array(
-                'email'     => $postData['emailadress'],
-                'password'  => $postData['password'],
-                'activated' => true,
-                'first_name' => $postData['fname'],
-                'last_name' => $postData['lname']
-            ));
+
+        $SentryUser = new SentryUser;
+
+        // creating new user
+        $SentryUser->addNewUser($postData);
+
+        return Redirect::to('user/dashboard');
     }
 }
