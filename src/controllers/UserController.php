@@ -110,4 +110,22 @@ class UserController extends BaseController
 
         $this->layout->content = View::make('sentryuser::user-listing')->with('users', $users);
     }
+
+    public function handleUserAdd()
+    {
+        $this->layout->content = View::make('sentryuser::add-user');
+    }
+
+    public function handleUserSave()
+    {
+        SentryHelper::dsm(Input::all(), true);
+        $postData = Input::all();
+        $newUser = Sentry::createUser(array(
+                'email'     => $postData['emailadress'],
+                'password'  => $postData['password'],
+                'activated' => true,
+                'first_name' => $postData['fname'],
+                'last_name' => $postData['lname']
+            ));
+    }
 }

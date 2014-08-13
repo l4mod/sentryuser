@@ -24,7 +24,9 @@ Route::group(array(
 
     // user section
     Route::get('user/list', 'UserController@handleUserListing');
-    
+    Route::get('user/add', 'UserController@handleUserAdd');
+    Route::post('user/save', 'UserController@handleUserSave');
+
     // the permission matrix section
     Route::get('user/permission/list', 'PermissionController@handlePermissionListing');
     Route::post('user/permission/save', 'PermissionController@handlePermissionSave');

@@ -194,4 +194,27 @@ class SentryUser extends Eloquent
 
         return $query;
     }
+
+    public function saveUser($userData)
+    {
+        $newUser = Sentry::createUser(array(
+                'email'     => $userData['emailadress'],
+                'password'  => $userData['password'],
+                'activated' => true,
+                'first_name' => $userData['fname'],
+                'last_name' => $userData['lname']
+            ));
+
+        $userId = $newUser->id;
+    }
+
+    private function checkIfUserExist($emailAddress)
+    {
+        $query = DB::table('users')->where('email', $emailAddress)->first();
+
+        if ($query != null)
+            return false;
+        else
+            return true;
+    }
 }

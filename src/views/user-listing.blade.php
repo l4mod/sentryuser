@@ -9,6 +9,10 @@
     </div>
 
     <div class="col-md-12">
+        <p><a href="{{url('user/add')}}">+ Add User</a></p>
+    </div>
+
+    <div class="col-md-12">
         <table class="table table-bordered table-responsive table-striped table-hover">
             <thead>
             <tr>

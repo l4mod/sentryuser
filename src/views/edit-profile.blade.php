@@ -45,7 +45,7 @@
             <span class="glyphicon glyphicon-warning-sign form-control-feedback" id="warning-for-conf-pass"></span>
             <span class="glyphicon glyphicon-ok form-control-feedback" id="success-for-conf-pass"></span>
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success">Save</button>
         {{ Form::close() }}
     </div>
     <div class="col-md-8">
