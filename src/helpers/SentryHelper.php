@@ -32,7 +32,11 @@ class SentryHelper {
         if (Session::get('message'))
             $tempMessage = Session::get('message');
 
-        $tempMessage = $tempMessage . $message;
+        if ($tempMessage == "")
+            $tempMessage = $message;
+        else
+            $tempMessage = $tempMessage . '<br />' . $message;
+
         Session::flash('message', $tempMessage);
         Session::flash('message-flag', $flag);
     }

@@ -239,4 +239,37 @@ class SentryUser extends Eloquent
         else
             return true;
     }
+
+    /**
+     * This function will delete multiple users
+     * @param $userIds
+     */
+    public function deleteMultipleUser($userIds)
+    {
+        // deleting user
+        try
+        {
+            DB::beginTransaction(); // start the DB transaction
+
+            foreach ($userIds as $key => $id)
+            {
+                if ($id == 1)
+                    SentryHelper::setMessage('Super user with id 1 cannot be deleted.', 'warning');
+                else
+                {
+                    $user = Sentry::findUserById($id);
+                    $user->delete();
+                    DB::table('user_details')->where('user_id', $id)->delete();
+                }
+            }
+
+            DB::commit(); // commit the DB transaction
+        }
+        catch (\Exception $e)
+        {
+            DB::rollback(); // something went wrong
+        }
+
+        SentryHelper::setMessage('Users deleted.');
+    }
 }

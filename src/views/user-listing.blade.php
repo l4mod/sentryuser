@@ -12,11 +12,25 @@
         <p><a href="{{url('user/add')}}">+ Add User</a></p>
     </div>
 
+    {{ Form::open(array('url' => 'entity-bulk-update', 'role' => 'form', 'class' => 'form-inline')) }}
     <div class="col-md-12">
+        <div class="form-group">
+            <label for="action">Bulk operation</label>
+            <select name="actions" id="action" class="form-control">
+                <option value="">SELECT</option>
+                <option value="delete">Delete</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <input type="submit" name="Update" class="btn btn-primary"/>
+            </div>
+        </div>
+        <p>&nbsp;</p>
         <table class="table table-bordered table-responsive table-striped table-hover">
             <thead>
             <tr>
-                <th>ID</th>
+                <th><input type="checkbox" name="multi-select-parent" value="" data-child="multi-select" class="chk-select-all"/></th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -26,8 +40,8 @@
             </thead>
             <tbody>
             @foreach ($users as $user)
-            <tr>
-                <td>{{$user->id}}</td>
+            <tr class="tr-chk-bx-sel">
+                <td><input type="checkbox" name="user-{{$user->id}}" value="user-{{$user->id}}" class="multi-select"/></td>
                 <td>{{$user->first_name}} {{$user->last_name}}</td>
                 <td>{{$user->email}}</td>
                 <td>{{$user->roleName}}</td>
@@ -39,5 +53,6 @@
         </table>
         {{$users->links()}}
     </div>
+    {{Form::close()}}
 </div>
 @stop

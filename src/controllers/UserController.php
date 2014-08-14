@@ -90,11 +90,11 @@ class UserController extends BaseController
     public function handleSaveProfile()
     {
         $postData = Input::all();
-        
+
         // creating the SentryUser object and calling the edit profile function.
         $SentryUser = new SentryUser;
         $SentryUser->editProfile($postData);
-        
+
         return Redirect::to('edit-profile');
     }
 
@@ -124,8 +124,6 @@ class UserController extends BaseController
 
     public function handleUserSave()
     {
-//        SentryHelper::dsm(Input::all(), true);
-
         $postData = Input::all();
 
         $SentryUser = new SentryUser;
@@ -134,5 +132,34 @@ class UserController extends BaseController
         $SentryUser->addNewUser($postData);
 
         return Redirect::to('user/dashboard');
+    }
+
+    public function entityOperationHandle()
+    {
+        $postData = Input::all();
+
+        if ($postData['actions'] == '')
+        {
+            SentryHelper::setMessage('You need to select an action', 'warning');
+            return Redirect::to('user/list');
+        }
+
+        $userIds = array();
+
+        foreach ($postData as $key => $value)
+        {
+            $tempArr = explode('-', $key);
+            if ($tempArr[0] == 'user')
+                $userIds[] = $tempArr[1];
+        }
+
+        switch ($postData['actions'])
+        {
+            case 'delete':
+                $SentryUser = new SentryUser;
+                $SentryUser->deleteMultipleUser($userIds);
+        }
+
+        return Redirect::to('user/list');
     }
 }

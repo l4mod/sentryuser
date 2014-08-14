@@ -14,6 +14,8 @@ Route::group(array(
     'before' => 'checkAuth'
 ), function ()
 {
+    Route::post('entity-bulk-update', 'UserController@entityOperationHandle');
+
     // general user login and other pages
     Route::get('user/logout', 'UserController@handleUserLogout');
     Route::get('user/dashboard', 'UserController@handleUserDashboard');
