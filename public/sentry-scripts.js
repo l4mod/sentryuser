@@ -3,8 +3,13 @@ $(document).ready(function() {
     /* handling the events for the new password text box */
     var newPasswordPass = false;
     handleNewPasswordEvents();
-
     handleConfPasswordEvents(newPasswordPass);
+    doSelectAllCheckbox();
+    handleMultiSelect();
+
+    $('.tr-chk-bx-sel').click(function() {
+        // $(this).closest('input["checkbox"]').prop("checked");
+    });
 });
 
 /*This function is handling the events for new password text box.*/
@@ -73,4 +78,19 @@ function handleConfPasswordEvents() {
                 $('#warning-for-conf-pass').hide();
             }
         });
+}
+
+/*if the main checkbox is selected, all child ones will be selected*/
+function doSelectAllCheckbox() {
+    $('.chk-select-all').click(function() {
+        var childCheckBoxId = $(this).data('child');
+        $('.'+childCheckBoxId).each(function() {
+            $(this).prop("checked", !$(this).prop("checked"));
+        })
+    });
+}
+
+
+function handleMultiSelect() {
+
 }
