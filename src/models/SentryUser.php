@@ -197,20 +197,6 @@ class SentryUser extends Eloquent
 
     public function addNewUser($userData)
     {
-        // check two passwords (already done in js but still doing at php level
-        if ($userData['password'] != $userData['conf'])
-        {
-            SentryHelper::setMessage('The two passwords don\'t match','warning');
-            return false;
-        }
-
-        // check if the user already exist
-        if (!$this->checkIfUserExist($userData['emailadress']))
-        {
-            SentryHelper::setMessage('A user with this email address already exist.','warning');
-            return false;
-        }
-
         $newUser = Sentry::createUser(array(
                 'email'     => $userData['emailadress'],
                 'password'  => $userData['password'],
@@ -230,7 +216,7 @@ class SentryUser extends Eloquent
         return true;
     }
 
-    private function checkIfUserExist($emailAddress)
+    public function checkIfUserExist($emailAddress)
     {
         $query = DB::table('users')->where('email', $emailAddress)->first();
 

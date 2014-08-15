@@ -126,12 +126,44 @@ class UserController extends BaseController
     {
         $postData = Input::all();
 
+        // message if validation fails
+        $messages = array(
+            'emailadress.required' => 'We need to know your e-mail address!',
+            'emailadress.email' => 'We don\'t think it is an email address',
+            'emailadress.checkemailexist' => 'This email is in use.',
+            'fname.required' => 'Please enter your full first name',
+            'lname.required' => 'Please enter your full last name',
+            'password.required' => 'You have to set a password',
+            'password.min' => 'Password should be at least 8 characters long',
+            'conf.required' => 'Write is again so that you are sure about your password',
+            'conf.matchpass' => 'The two passwords does not match', // this is for the custom validatio that we have written
+        );
+
+        // rules for the validation
+        $rules = array(
+            'fname' => 'required|min:3',
+            'lname' => 'required|min:1',
+            'password' => 'required|min:8',
+            'conf' => 'required|Matchpass:' . $postData["password"],
+            'emailadress' => 'required|email|Checkemailexist',
+        );
+
+        $validator = Validator::make($postData, $rules, $messages);
+
+        // when there are errors in the form
+        if ($validator->fails())
+        {
+            // send back to the page with the input data and errors
+            SentryHelper::setMessage('Fix the errors.', 'warning'); // setting the error message
+            return Redirect::to('user/add')->withInput()->withErrors($validator);
+        }
+
         $SentryUser = new SentryUser;
 
         // creating new user
         $SentryUser->addNewUser($postData);
 
-        return Redirect::to('user/dashboard');
+        return Redirect::to('user/list');
     }
 
     public function entityOperationHandle()
