@@ -78,6 +78,33 @@ class CreatePermInGroupTable extends Migration {
                 'group_id' => 2,
                 'allow' => 0,
             ));
+
+        /*for authneticated user*/
+        DB::table('permission_in_group')->insert(array(
+                'permission_id' => 1,
+                'group_id' => 3,
+                'allow' => 0,
+            ));
+        DB::table('permission_in_group')->insert(array(
+                'permission_id' => 2,
+                'group_id' => 3,
+                'allow' => 0,
+            ));
+        DB::table('permission_in_group')->insert(array(
+                'permission_id' => 3,
+                'group_id' => 3,
+                'allow' => 0,
+            ));
+        DB::table('permission_in_group')->insert(array(
+                'permission_id' => 4,
+                'group_id' => 3,
+                'allow' => 0,
+            ));
+        DB::table('permission_in_group')->insert(array(
+                'permission_id' => 5,
+                'group_id' => 3,
+                'allow' => 0,
+            ));
     }
 
     /**

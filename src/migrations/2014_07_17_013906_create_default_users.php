@@ -57,6 +57,10 @@ class CreateDefaultUsers extends Migration {
 
         $adminGroup = Sentry::findGroupById(2);
         $user->addGroup($adminGroup);
+
+        $group = Sentry::createGroup(array(
+                'name' => 'Authenticated User'
+            ));
     }
 
     /**
