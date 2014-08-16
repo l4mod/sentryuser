@@ -20,6 +20,14 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    @section('scripts')
+    <script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/jquery-1.11.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/scripts.js') }}"></script>
+    @show
+
     <script type="text/javascript">
         var base_url = "{{ URL::to('/') }}/";
     </script>
@@ -53,12 +61,5 @@
         </div>
     </div>
 </div>
-
-<!-- Include all compiled plugins (below), or include individual files as needed -->
-@section('scripts')
-<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/jquery-1.11.1.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/scripts.js') }}"></script>
-@show
 </body>
 </html>

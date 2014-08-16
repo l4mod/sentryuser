@@ -246,6 +246,7 @@ class SentryUser extends Eloquent
                     $user = Sentry::findUserById($id);
                     $user->delete();
                     DB::table('user_details')->where('user_id', $id)->delete();
+                    DB::table('users_groups')->where('user_id', $id)->delete();
                 }
             }
 

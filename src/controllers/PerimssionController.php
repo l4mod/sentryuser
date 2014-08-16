@@ -121,4 +121,48 @@ class PermissionController extends BaseController
 
         return Redirect::to('user/role/edit/' . $roleId);
     }
+
+    public function handleRoleDelete($id)
+    {
+        try
+        {
+            DB::beginTransaction(); // start the DB transaction
+
+            $group = Sentry::findGroupById($id);
+            $authenticatedGroup = Sentry::findGroupById(3);
+
+            // super admin group cannot be deleted
+            if ($id == 1 || $id == 3)
+            {
+                SentryHelper::setMessage('This role cannot be deleted.', 'warning');
+                return Redirect::to('user/permission/list');
+            }
+
+            // assign authenticated user group
+            $users = Sentry::findAllUsersInGroup($group);
+            foreach ($users as $user)
+            {
+                $user->addGroup($authenticatedGroup);
+            }
+
+            // delete group
+            $group->delete();
+
+            // clear permission in group mapping
+            DB::table('permission_in_group')->where('group_id', $id)->delete();
+
+            DB::table('users_groups')->where('user_id', $id)->update(array(
+                    'group_id' => $authenticatedGroup->id,
+                ));
+
+            DB::commit(); // commit the DB transaction
+
+            SentryHelper::setMessage('Role deleted, all users of this role are now Authenticated users.');
+            return Redirect::to('user/permission/list');
+        }
+        catch (\Exception $e)
+        {
+            DB::rollback(); // something went wrong
+        }
+    }
 }
