@@ -11,25 +11,8 @@ $(document).ready(function() {
         // $(this).closest('input["checkbox"]').prop("checked");
     });
 
-    $('.delete-entity').click(function() {
-        var entity = $(this).data('entity');
-        var entityId = $(this).data('entity-id');
-        var cnfrm = confirm("Sure you want to delete");
-
-        if(cnfrm === true)
-        {
-            $.ajax({
-                type: "POST",
-                url: base_url + 'delete-entity',
-                data: {entityId: entityId, entity: entity}
-            }).success(function (data)
-            {
-                location.reload();
-            });
-        }
-        else
-            return false;
-    });
+    /*Handling the delete of entity*/
+    handleDeleteEntity();
 });
 
 /*This function is handling the events for new password text box.*/
@@ -113,4 +96,25 @@ function doSelectAllCheckbox() {
 
 function handleMultiSelect() {
 
+}
+
+function handleDeleteEntity()
+{
+    $('.delete-entity').click(function() {
+        var entity = $(this).data('entity');
+        var entityId = $(this).data('entity-id');
+        var cnfrm = confirm("Sure you want to delete");
+
+        if(cnfrm === true)
+        {
+            $.ajax({
+                type: "POST",
+                url: base_url + 'delete-entity',
+                data: {entityId: entityId, entity: entity}
+            }).success(function (data)
+            {
+                location.reload();
+            });
+        }
+    });
 }

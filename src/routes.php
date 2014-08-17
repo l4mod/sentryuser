@@ -37,7 +37,6 @@ Route::group(array(
     Route::post('user/permission/add', 'PermissionController@handlePermissionAdd');
     Route::post('user/role/add', 'PermissionController@handleRoleAdd');
     Route::get('user/role/edit/{id}', 'PermissionController@handleRoleEdit');
-    Route::get('user/role/delete/{id}', 'PermissionController@handleRoleDelete');
     Route::post('user/role/update', 'PermissionController@handleRoleUpdate');
 });
 

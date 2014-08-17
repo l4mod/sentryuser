@@ -207,6 +207,11 @@ class UserController extends BaseController
                 DB::table($table)->where('id', $entityId)->delete();
                 SentryHelper::setMessage('The user has been deleted');
                 break;
+
+            case 'role':
+                $SentryPermission =  new SentryPermission;
+                $SentryPermission->deleteRole($entityId);
+                break;
         }
     }
 }

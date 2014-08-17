@@ -46,7 +46,14 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->roleName}}</td>
                 <td>{{$user->last_login}}</td>
-                <td>Edit / <span class="delete-entity" data-entity="user" data-entity-id="{{$user->id}}"><a href="#">Delete</a></span></td>
+                <td>
+                    <a href="javascript:void(0);">
+                        <span class="pull-right remove fa fa-trash-o delete-entity"
+                              data-entity="user"
+                              data-entity-id="{{$user->id}}"></span></a>
+                    <a href="javascript:void(0);">
+                        <span class="pull-right edit fa fa-edit"></span></a>
+                </td>
             </tr>
             @endforeach
             </tbody>

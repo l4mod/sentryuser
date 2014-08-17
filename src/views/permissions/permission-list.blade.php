@@ -1,3 +1,6 @@
+@section('scripts')
+@parent<script type="text/javascript" src="{{ asset('packages/l4mod/sentryuser/sentry-scripts.js') }}"></script>
+@stop
 @section('content')
 <div class="row">
 	<div class="col-md-12">
@@ -89,7 +92,12 @@
                             @foreach ($groups as $group)
                             <li class="list-group-item">
                                 @if ($group->id != 1 && $group->id != 3)
-                                <a href="{{url('user/role/delete/'.$group->id)}}"><span class="pull-right remove fa fa-trash-o" id="group-{{$group->id}}"></span></a>
+                                <a href="javascript:void(0);">
+                                    <span class="pull-right remove fa fa-trash-o delete-entity"
+                                          data-entity="role"
+                                          data-entity-id="{{$group->id}}"
+                                          id="group-{{$group->id}}"></span>
+                                </a>
                                 <a href="{{url('user/role/edit/'.$group->id)}}"><span class="pull-right edit fa fa-edit"></span></a>
                                 @endif
                                 {{$group->name}}</li>
