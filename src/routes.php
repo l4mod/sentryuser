@@ -14,7 +14,9 @@ Route::group(array(
     'before' => 'checkAuth'
 ), function ()
 {
+    // entity urls
     Route::post('entity-bulk-update', 'UserController@entityOperationHandle');
+    Route::post('delete-entity', 'UserController@entityDeleteHandle');
 
     // general user login and other pages
     Route::get('user/logout', 'UserController@handleUserLogout');

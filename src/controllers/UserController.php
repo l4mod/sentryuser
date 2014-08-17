@@ -194,4 +194,19 @@ class UserController extends BaseController
 
         return Redirect::to('user/list');
     }
+
+    public function entityDeleteHandle()
+    {
+        $entity = Input::get('entity');
+        $entityId = Input::get('entityId');
+
+        switch ($entity)
+        {
+            case 'user':
+                $table = 'users';
+                DB::table($table)->where('id', $entityId)->delete();
+                SentryHelper::setMessage('The user has been deleted');
+                break;
+        }
+    }
 }

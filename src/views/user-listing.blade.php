@@ -23,7 +23,7 @@
         </div>
         <div class="form-group">
             <div class="input-group">
-                <input type="submit" name="Update" class="btn btn-primary"/>
+                <input type="submit" name="Update" class="btn btn-primary" value="Update"/>
             </div>
         </div>
         <p>&nbsp;</p>
@@ -46,7 +46,7 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->roleName}}</td>
                 <td>{{$user->last_login}}</td>
-                <td>Edit / Delete</td>
+                <td>Edit / <span class="delete-entity" data-entity="user" data-entity-id="{{$user->id}}"><a href="#">Delete</a></span></td>
             </tr>
             @endforeach
             </tbody>

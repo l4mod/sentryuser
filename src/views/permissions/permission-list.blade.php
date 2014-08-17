@@ -88,7 +88,7 @@
                         <ul class="list-group">
                             @foreach ($groups as $group)
                             <li class="list-group-item">
-                                @if ($group->id != 1)
+                                @if ($group->id != 1 && $group->id != 3)
                                 <a href="{{url('user/role/delete/'.$group->id)}}"><span class="pull-right remove fa fa-trash-o" id="group-{{$group->id}}"></span></a>
                                 <a href="{{url('user/role/edit/'.$group->id)}}"><span class="pull-right edit fa fa-edit"></span></a>
                                 @endif
