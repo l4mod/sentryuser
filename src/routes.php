@@ -17,6 +17,7 @@ Route::group(array(
     // entity urls
     Route::post('entity-bulk-update', 'UserController@entityOperationHandle');
     Route::post('delete-entity', 'UserController@entityDeleteHandle');
+    Route::post('edit-entity', 'UserController@entityEditHandle');
 
     // general user login and other pages
     Route::get('user/logout', 'UserController@handleUserLogout');
@@ -30,6 +31,7 @@ Route::group(array(
     Route::get('user/list', 'UserController@handleUserListing');
     Route::get('user/add', 'UserController@handleUserAdd');
     Route::post('user/save', 'UserController@handleUserSave');
+    Route::get('user/edit/{id}', 'UserController@handleEditUser');
 
     // the permission matrix section
     Route::get('user/permission/list', 'PermissionController@handlePermissionListing');

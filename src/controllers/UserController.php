@@ -95,7 +95,10 @@ class UserController extends BaseController
         $SentryUser = new SentryUser;
         $SentryUser->editProfile($postData);
 
-        return Redirect::to('edit-profile');
+        if (isset($postData['user_id']))
+            return Redirect::to('user/edit/' . $postData['user_id']);
+        else
+            return Redirect::to('edit-profile');
     }
 
     // returning the user listing view
@@ -111,6 +114,7 @@ class UserController extends BaseController
         $this->layout->content = View::make('sentryuser::user-listing')->with('users', $users);
     }
 
+    // returning the user add form view
     public function handleUserAdd()
     {
         // checking the access for the user
@@ -122,6 +126,7 @@ class UserController extends BaseController
         $this->layout->content = View::make('sentryuser::add-user')->with('roles', $roles);
     }
 
+    // handling the post data from user save
     public function handleUserSave()
     {
         $postData = Input::all();
@@ -158,14 +163,22 @@ class UserController extends BaseController
             return Redirect::to('user/add')->withInput()->withErrors($validator);
         }
 
-        $SentryUser = new SentryUser;
-
         // creating new user
+        $SentryUser = new SentryUser;
         $SentryUser->addNewUser($postData);
 
         return Redirect::to('user/list');
     }
 
+    public function handleEditUser($id)
+    {
+        $user = UserHelper::getUserObj($id);
+        $this->layout->content = View::make('sentryuser::edit-profile')
+        ->with('userdata', $user)
+        ->with('uid', $id);
+    }
+
+    // this is the generic function which will handle bulk operations
     public function entityOperationHandle()
     {
         $postData = Input::all();
@@ -195,6 +208,25 @@ class UserController extends BaseController
         return Redirect::to('user/list');
     }
 
+    // handling the entity edit ajax requests.
+    public function entityEditHandle()
+    {
+        $entity = Input::get('entity');
+        $entityId = Input::get('entityId');
+
+        switch ($entity)
+        {
+            case 'user':
+                return Response::json(array('url' => 'user/edit/' . $entityId));
+                break;
+
+            case 'role':
+                return Response::json(array('url' => 'user/role/edit/' . $entityId));
+                break;
+        }
+    }
+
+    // handling the entity delete ajax requests.
     public function entityDeleteHandle()
     {
         $entity = Input::get('entity');

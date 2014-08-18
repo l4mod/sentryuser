@@ -98,7 +98,10 @@
                                           data-entity-id="{{$group->id}}"
                                           id="group-{{$group->id}}"></span>
                                 </a>
-                                <a href="{{url('user/role/edit/'.$group->id)}}"><span class="pull-right edit fa fa-edit"></span></a>
+                                <a href="javascript:void(0);">
+                                    <span class="pull-right edit fa fa-edit edit-entity"
+                                          data-entity="role"
+                                          data-entity-id="{{$group->id}}"></span></a>
                                 @endif
                                 {{$group->name}}</li>
                             @endforeach

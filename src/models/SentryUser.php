@@ -77,9 +77,14 @@ class SentryUser extends Eloquent
             if ($this->updateProfilePassword($postData['currentPassword'], $postData['newPassword'], $postData['conf']))
                 $passwordChangeFlag = true;
         }
-        
-        // get the sentry user object
-        $user = Sentry::getUser();
+
+        $logged_in_user = Session::get('userObj')->id;
+
+        // check if uid is present. Uid as hidden when coming from user edit form. Else no id.
+        if (isset($postData['user_id']))
+            $user = Sentry::findUserById($postData['user_id']);
+        else
+            $user = Sentry::getUser();
         
         // set the password only if the flag is true
         if ($passwordChangeFlag == true)
@@ -100,10 +105,14 @@ class SentryUser extends Eloquent
 
         if ($user->save())
         {
-            // calling the event of profile change
-            $subscriber = new SentryuserEventHandler;
-            Event::subscribe($subscriber);
-            Event::fire('sentryuser.profilechange', $user);
+            // event should fire only when user is editing his own profile.
+            if (!isset($postData['user_id']) || $logged_in_user == $postData['user_id'])
+            {
+                // calling the event of profile change
+                $subscriber = new SentryuserEventHandler;
+                Event::subscribe($subscriber);
+                Event::fire('sentryuser.profilechange', $user);
+            }
             
             SentryHelper::setMessage('Your profile details were updated');
             return true;

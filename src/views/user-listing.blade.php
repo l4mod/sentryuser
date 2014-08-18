@@ -52,7 +52,9 @@
                               data-entity="user"
                               data-entity-id="{{$user->id}}"></span></a>
                     <a href="javascript:void(0);">
-                        <span class="pull-right edit fa fa-edit"></span></a>
+                        <span class="pull-right edit fa fa-edit edit-entity"
+                              data-entity="user"
+                              data-entity-id="{{$user->id}}"></span></a>
                 </td>
             </tr>
             @endforeach

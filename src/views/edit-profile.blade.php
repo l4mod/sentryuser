@@ -46,6 +46,9 @@
             <span class="glyphicon glyphicon-ok form-control-feedback" id="success-for-conf-pass"></span>
         </div>
         <button type="submit" class="btn btn-success">Save</button>
+        @if (isset($uid))
+        {{Form::hidden('user_id', $uid)}}
+        @endif
         {{ Form::close() }}
     </div>
     <div class="col-md-8">

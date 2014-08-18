@@ -13,6 +13,9 @@ $(document).ready(function() {
 
     /*Handling the delete of entity*/
     handleDeleteEntity();
+
+    /*Handling the edit of the entity. This is just a redirect*/
+    handleEntityEditRedirect();
 });
 
 /*This function is handling the events for new password text box.*/
@@ -116,5 +119,21 @@ function handleDeleteEntity()
                 location.reload();
             });
         }
+    });
+}
+
+function handleEntityEditRedirect()
+{
+    $('.edit-entity').click(function() {
+        var entity = $(this).data('entity');
+        var entityId = $(this).data('entity-id');
+
+        $.ajax({
+            type: "POST",
+            url: base_url + 'edit-entity',
+            data: {entityId: entityId, entity: entity}
+        }).success(function(response) {
+            window.location.href = base_url + response.url;
+        });
     });
 }
