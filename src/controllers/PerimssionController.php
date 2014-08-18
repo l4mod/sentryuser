@@ -9,29 +9,35 @@ use Illuminate\Support\Facades\Redirect;
 
 class PermissionController extends BaseController
 {
+    /**
+     * Defining the master layout.
+     * @var string
+     */
     protected $layout = 'sentryuser::master';
 
     /**
-     * Setting the layout of the controller to something else
-     * if the configuration is present.
+     * Calling the constructor to execute any code on load of this class.
      */
     public function __construct()
     {
-    if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
-        {
+        /**
+         * Setting the layout of the controller to something else
+         * if the configuration is present.
+         */
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
             $this->layout = Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl');
-        }
     }
 
     /**
      * Main function to handle the three tabbed page
-     * Permission assignment, Permission management and Role management
+     * Permission assignment, Permission management and Role management.
      */
     public function handlePermissionListing()
     {
+        // checking if the user has access to the permission
         PermApi::access_check('manage_permissions');
 
-        // creating the sentry permissin model instance
+        // creating the sentry permission model instance
         $SentryPermission = new SentryPermission;
 
         // fetch the permission table data in array format
@@ -46,7 +52,7 @@ class PermissionController extends BaseController
     }
 
     /**
-     * Post handler for saving permissions
+     * Post handler for saving permissions.
      * @return mixed
      */
     public function handlePermissionSave()
@@ -92,6 +98,11 @@ class PermissionController extends BaseController
         return Redirect::to('user/permission/list');
     }
 
+    /**
+     * Handling the form for role edit.
+     * @param $roleId
+     * @return mixed
+     */
     public function handleRoleEdit($roleId)
     {
         if ($roleId == 1)

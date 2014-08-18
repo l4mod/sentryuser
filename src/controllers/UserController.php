@@ -9,35 +9,48 @@ use Illuminate\Support\Facades\Redirect;
 
 class UserController extends BaseController
 {
+    /**
+     * Defining the master layout.
+     * @var string
+     */
     protected $layout = 'sentryuser::master';
 
     /**
-     * Setting the layout of the controller to something else
-     * if the configuration is present.
+     * Calling the constructor to execute any code on load of this class.
      */
     public function __construct()
     {
+        /**
+         * Setting the layout of the controller to something else
+         * if the configuration is present.
+         */
         if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
-        {
             $this->layout = Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl');
-        }
     }
 
-    // return the access denied page
+    /**
+     * Return the access denied page.
+     * Mainly the check_access function will redirect a user to this page.
+     */
     public function handleAccessDeniedPage()
     {
         $this->layout->menuSkip = true;
         $this->layout->content = View::make('sentryuser::access-denied');
     }
 
-    // return the view for the login page
+    /**
+     * Return the view for the login page.
+     */
     public function handleLoginPage()
     {
         $this->layout->menuSkip = true;
         $this->layout->content = View::make('sentryuser::login');
     }
 
-    // this function is handling the post data from the login page
+    /**
+     * This function is handling the post data from the login page.
+     * @return mixed
+     */
     public function handleUserAuthentication()
     {
         $username = Input::get('email');
@@ -49,10 +62,10 @@ class UserController extends BaseController
         {
             SentryHelper::setMessage('Login successful', 'success');
 
-            /* firing the login event*/
             $user = Session::get('userObj'); // getting the user object from session to pass to the event.
-            $userSubscriber = new SentryuserEventHandler;
 
+            /* firing the login event*/
+            $userSubscriber = new SentryuserEventHandler;
             Event::subscribe($userSubscriber);
             Event::fire('sentryuser.login', array($user));
 
@@ -64,13 +77,18 @@ class UserController extends BaseController
         }
     }
 
-    // return the view for the dashboard page
+    /**
+     * Return the view for the dashboard page.
+     */
     public function handleUserDashboard()
     {
         $this->layout->content = View::make('sentryuser::dashboard');
     }
 
-    // handling user logout
+    /**
+     * Handling user logout.
+     * @return mixed
+     */
     public function handleUserLogout()
     {
         Sentry::logout();
@@ -78,7 +96,9 @@ class UserController extends BaseController
         return Redirect::to('user');
     }
 
-    // returning the edit profile view
+    /**
+     * Returning the edit profile view.
+     */
     public function handleEditProfile()
     {
         $thisUser = Session::get('userObj');
@@ -86,7 +106,10 @@ class UserController extends BaseController
         $this->layout->content = View::make('sentryuser::edit-profile')->with('userdata', $userData);
     }
 
-    // handling the post from the edit profile form
+    /**
+     * Handling the post from the edit profile form.
+     * @return mixed
+     */
     public function handleSaveProfile()
     {
         $postData = Input::all();
@@ -101,7 +124,9 @@ class UserController extends BaseController
             return Redirect::to('edit-profile');
     }
 
-    // returning the user listing view
+    /**
+     * Returning the user listing view.
+     */
     public function handleUserListing()
     {
         // checking the access for the user
@@ -114,7 +139,9 @@ class UserController extends BaseController
         $this->layout->content = View::make('sentryuser::user-listing')->with('users', $users);
     }
 
-    // returning the user add form view
+    /**
+     * Returning the user add form view.
+     */
     public function handleUserAdd()
     {
         // checking the access for the user
@@ -126,7 +153,10 @@ class UserController extends BaseController
         $this->layout->content = View::make('sentryuser::add-user')->with('roles', $roles);
     }
 
-    // handling the post data from user save
+    /**
+     * Handling the post data from user save.
+     * @return mixed
+     */
     public function handleUserSave()
     {
         $postData = Input::all();
@@ -170,6 +200,10 @@ class UserController extends BaseController
         return Redirect::to('user/list');
     }
 
+    /**
+     * Handling the page for editing a user profile.
+     * @param null $id
+     */
     public function handleEditUser($id = null)
     {
         $user = UserHelper::getUserObj($id);
@@ -178,7 +212,12 @@ class UserController extends BaseController
         ->with('uid', $id);
     }
 
-    // this is the generic function which will handle bulk operations
+    /**
+     * This is the generic function which will handle bulk operations.
+     * Ajax call from jQuery is coming on this page with the action and processing as per option.
+     * TODO: This is right now hardcoded to only delete. Need to make it generic.
+     * @return mixed
+     */
     public function entityOperationHandle()
     {
         $postData = Input::all();
@@ -208,7 +247,10 @@ class UserController extends BaseController
         return Redirect::to('user/list');
     }
 
-    // handling the entity edit ajax requests.
+    /**
+     * Handling the entity edit ajax requests.
+     * @return mixed
+     */
     public function entityEditHandle()
     {
         $entity = Input::get('entity');
@@ -226,7 +268,9 @@ class UserController extends BaseController
         }
     }
 
-    // handling the entity delete ajax requests.
+    /**
+     * Handling the entity delete ajax requests.
+     */
     public function entityDeleteHandle()
     {
         $entity = Input::get('entity');
