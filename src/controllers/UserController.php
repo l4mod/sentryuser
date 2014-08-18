@@ -170,7 +170,7 @@ class UserController extends BaseController
         return Redirect::to('user/list');
     }
 
-    public function handleEditUser($id)
+    public function handleEditUser($id = null)
     {
         $user = UserHelper::getUserObj($id);
         $this->layout->content = View::make('sentryuser::edit-profile')
