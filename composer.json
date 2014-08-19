@@ -14,11 +14,6 @@
         "laravel/framework": "~4.0",
         "cartalyst/sentry": "2.1.*"
     },
-    "scripts": {
-        "post-update-cmd": [
-            "php artisan su:reset"
-        ]
-    },
     "autoload": {
         "classmap": [
             "src/migrations",
