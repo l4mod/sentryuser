@@ -1,33 +1,35 @@
-### Sentry user and Permission
-This module is a ready made user management and permission management module on top of Sentry. Once this module is enabled and the Migrations are executed, this module creates a default Super Admin user and also creates a permission matrix system. The permission Matrix is a custom module which is using the Sentry groups along with custom tables to manage the permission management screen similar to drupal's permission matrix.
+#L4 User and Permission Management
+##Introduction
+A user management and permission management module on top of the Sentry (by cartalyst) module. This module uses all the functionalities core to Sentry module, but just it give you a UI like the Drupal’s permission matrix to manage things a bit easily.
 
-There will be a single function which can be used to check the access of a user based on the group he is in and the permission which his particular group has. 
-[Note: This module depends completly on Sentry module]
+The markup of the UI is Bootstrap layout so the markup can fit in well with any other Bootstrap theme or even if someone is writing their own CSS.
 
-#### How to use
-To use this module, first we need to add the Service provider in app.php
+The requirements for this package is same as what Sentry module has.
+
+##Installation
+You need to first add the service provider inside app.php to start using the module, so add this line of code:
 
     'Amitavroy\Sentryuser\SentryuserServiceProvider'
-
-Once this is added, we need to run the migrations for this package and so a few additional tables are created and a default user with role Super Admin is created.
-
-    php artisan migrate --package l4mod/sentryuser
-
-Then to publish the configuration, you need to run the command:
     
-    php artisan config:publish l4mod/sentryuser
+Once this is added, we are ready to run one line of command which will set up everything - php artisan. Once this is done, you should get something like this:
 
-And finally, publish the assets for this module using this command:
+    Migrated: 2014_07_17_013906_create_default_users
+    Migrated: 2014_07_17_020953_create_permissions_table
+    Migrated: 2014_07_19_090625_create_perm_in_group_table
+    Migrated: 2014_07_27_062542_create_user_details_tbl
+    Assets published for package: l4mod/sentryuser
+    Configuration published for package: l4mod/sentryuser
+    Application cache cleared!
+    Generating optimized class loader
 
-    php artisan asset:publish l4mod/sentryuser
+Login page can be accessed using /user url. This is where you can login based on the default users which have been created.
 
-a) permissions b) permissision in groups.
+##Default Install
 
-##### Users
-The user module has the basic login functionality which is internally using Sentry module. There is edit profile page where user can update his First name, Last name and also change his password.
+The default installation comes with two roles
 
-##### Roles
-The groups of Sentry is used as Role in this system. For now every user can hold only one role. His role will decide the permissions that the user has.
+1. Super Admin = this role has all permissions
+2. Administrator = second role with stripped down privileges
 
-##### Permissions
-The permission setting page can be accessed from the top menu if you are using the complete Github application or through this url: "user/permission/list".
+There are two users which come with the default migrations:
+amitavroy@gmail.com and amitav.roy@focalworks.in, the first one is super admin and the second being is the one with administrator role.
