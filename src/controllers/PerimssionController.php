@@ -57,6 +57,8 @@ class PermissionController extends BaseController
      */
     public function handlePermissionSave()
     {
+        PermApi::access_check('manage_permissions');
+
         $postData = Input::all();
         $SentryPermission = new SentryPermission;
 
@@ -78,6 +80,8 @@ class PermissionController extends BaseController
      */
     public function handlePermissionAdd()
     {
+        PermApi::access_check('manage_permissions');
+
         $SentryPermission = new SentryPermission;
         $SentryPermission->addPermission(Input::all());
         
@@ -90,6 +94,8 @@ class PermissionController extends BaseController
      */
     public function handleRoleAdd()
     {
+        PermApi::access_check('manage_permissions');
+
         $roleName = Input::get('role_name');
 
         $SentryPermission = new SentryPermission;
@@ -105,6 +111,8 @@ class PermissionController extends BaseController
      */
     public function handleRoleEdit($roleId)
     {
+        PermApi::access_check('manage_permissions');
+
         if ($roleId == 1)
         {
             SentryHelper::setMessage('This role cannot be edited');

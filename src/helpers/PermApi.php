@@ -8,6 +8,11 @@
 
 class PermApi
 {
+    /**
+     * This is an internal function to check if the user has the permission.
+     * @param $permissionName
+     * @return bool
+     */
     public static function user_has_permission($permissionName)
     {
         $user = Sentry::getUser();
@@ -23,6 +28,11 @@ class PermApi
             return false;
     }
 
+    /**
+     * This function will call internal function to check permission,
+     * if permission is not there, redirect to access denied page.
+     * @param $permissionName
+     */
     public static function access_check($permissionName)
     {
         if (!PermApi::user_has_permission($permissionName))

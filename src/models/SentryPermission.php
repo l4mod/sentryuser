@@ -155,6 +155,12 @@ class SentryPermission extends Eloquent
         return $data;
     }
 
+    /**
+     * This function is adding the permission into the permission table
+     * then the permission mapping table with 0 as entries
+     * @param $postData
+     * @return bool
+     */
     public function addPermission($postData)
     {
         $permission_name = $this->sanitizeName($postData['permission_name']);
@@ -171,7 +177,10 @@ class SentryPermission extends Eloquent
                         'permission_group_name' => 'Users'
                     ));
 
-                // updating the permission group mapping table
+                /**
+                 * updating the permission group mapping table
+                 * super admin will have all permissions, hence allow 1
+                 */
                 DB::table('permission_in_group')->insert(array(
                         'permission_id' => $permission_id,
                         'group_id' => 1,
@@ -187,7 +196,7 @@ class SentryPermission extends Eloquent
                 $group->permissions = $group_perm_array;
                 $group->save();
 
-                // adding zero to all other groups
+                // adding zero to all other groups except super admin
                 $groups = $this->getPermissionTableGroups();
                 foreach ($groups as $group) {
                     if ($group->id != 1) {
@@ -314,8 +323,21 @@ class SentryPermission extends Eloquent
             return true;
     }
 
+    /**
+     * Changing the role name
+     * @param $roleId
+     * @param $roleName
+     * @return bool
+     */
     public function updateRole($roleId, $roleName)
     {
+        // checking if the role already exist, then we cannot use the same name.
+        if (!$this->checkIfRoleExist($roleName))
+        {
+            SentryHelper::setMessage('A role with the same name already exist.', 'warning');
+            return false;
+        }
+
         DB::table('groups')->where('id', $roleId)->update(array(
                 'name' => $roleName
             ));
