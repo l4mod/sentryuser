@@ -38,9 +38,6 @@ class ReBaseApp extends Command {
      */
     public function fire()
     {
-        $this->call('migrate:reset');
-        $this->info('Migrations reset');
-        $this->call('migrate', array('--package' => 'cartalyst/sentry'));
         $this->call('migrate', array('--package' => 'l4mod/sentryuser'));
         $this->call('asset:publish', array('l4mod/sentryuser'));
         $this->call('config:publish', array('package' => 'l4mod/sentryuser'));
