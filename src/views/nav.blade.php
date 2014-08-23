@@ -8,7 +8,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      {{ link_to('user/dashboard', 'L4 Mod :: Sentry User', array('class' => 'navbar-brand')) }}
+      {{ link_to('user/dashboard', Config::get('packages/l4mod/sentryuser/sentryuser.site-title'), array('class' => 'navbar-brand')) }}
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
