@@ -25,5 +25,10 @@ return array(
      * Set this to a navigation template so that the top navigation menu is replaced.
      */
     'nav-tpl' => '',
+    
+    /**
+     * Use OAuth users
+     */
+    'o-auth' => false,
 
 );
