@@ -31,4 +31,3 @@ The groups of Sentry is used as Role in this system. For now every user can hold
 
 ##### Permissions
 The permission setting page can be accessed from the top menu if you are using the complete Github application or through this url: "user/permission/list".
-Check
