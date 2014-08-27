@@ -30,5 +30,10 @@ return array(
      * Use OAuth users
      */
     'o-auth' => false,
+    
+    /**
+     * Preferred domain for O Auth
+     */
+    'o-auth-domain' => array('gmail.com', 'focalworks.in'),
 
 );

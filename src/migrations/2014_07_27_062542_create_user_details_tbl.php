@@ -20,6 +20,13 @@ class CreateUserDetailsTbl extends Migration
             $table->increments('user_detail_id');
             $table->integer('user_id');
             $table->integer('user_profile_img')->default(0); // user profile image file id
+            
+            // data coming from oauth
+            $table->integer('oauthid');
+            $table->string('oauth_link');
+            $table->string('oauth_pic');
+            $table->string('gender');
+            $table->string('locale');
         });
         
         DB::table('user_details')->insert(array(

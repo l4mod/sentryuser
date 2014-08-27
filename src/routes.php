@@ -9,6 +9,8 @@ Route::get('access-denied', 'UserController@handleAccessDeniedPage');
 Route::get('user', 'UserController@handleLoginPage');
 Route::post('do-login', 'UserController@handleUserAuthentication');
 
+Route::get('user/oauth', 'UserController@handleOAuthLogin');
+
 /* this section is for authenticated users only */
 Route::group(array(
     'before' => 'checkAuth'
