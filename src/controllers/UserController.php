@@ -45,6 +45,9 @@ class UserController extends BaseController
      */
     public function handleLoginPage()
     {
+        if (Sentry::check()) {
+            return Redirect::to('user/dashboard');
+        }
         $this->layout->menuSkip = true;
         $this->layout->content = View::make('sentryuser::login');
     }

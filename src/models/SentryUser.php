@@ -73,7 +73,9 @@ class SentryUser extends Eloquent
         $passwordChangeFlag = false;
         
         // checking if we need to change the password or not
-        if ($postData['newPassword'] != '' && $postData['conf'] != '' && $postData['currentPassword'] != '') {
+        if (isset($postData['newPassword']) && $postData['newPassword'] != '' 
+            && isset($postData['conf']) && $postData['conf'] != ''
+            && isset($postData['currentPassword']) && $postData['currentPassword'] != '') {
             if ($this->updateProfilePassword($postData['currentPassword'], $postData['newPassword'], $postData['conf']))
                 $passwordChangeFlag = true;
         }

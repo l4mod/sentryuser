@@ -26,6 +26,7 @@
         </div>
         @endif
         
+        @if ($userdata->user_type == 'normal')
         <h2>Password</h2>
         <div class="form-group">
             <label for="currentPassword">Current password</label>
@@ -45,6 +46,7 @@
             <span class="glyphicon glyphicon-warning-sign form-control-feedback" id="warning-for-conf-pass"></span>
             <span class="glyphicon glyphicon-ok form-control-feedback" id="success-for-conf-pass"></span>
         </div>
+        @endif
         <button type="submit" class="btn btn-success">Save</button>
         @if (isset($uid))
         {{Form::hidden('user_id', $uid)}}
