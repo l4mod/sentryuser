@@ -197,6 +197,9 @@ class UserController extends BaseController
             return Redirect::to('user/add')->withInput()->withErrors($validator);
         }
         
+        // when created through form, these users will be normal users.
+        $postData['user_type'] = 'normal';
+        
         // creating new user
         $SentryUser = new SentryUser();
         $SentryUser->addNewUser($postData);
@@ -326,7 +329,6 @@ class UserController extends BaseController
             } else {
                 SentryHelper::dsm('This domain is not allowed on this site.', 'warning');
             }
-            SentryHelper::dsm($result, true);
         }         // if not ask for permission first
         else {
             // get googleService authorization
