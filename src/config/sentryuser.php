@@ -35,5 +35,10 @@ return array(
      * Preferred domain for O Auth
      */
     'o-auth-domain' => array('gmail.com', 'focalworks.in'),
+    
+    /**
+     * Set the login 
+     */
+    'login-tpl' => '',
 
 );

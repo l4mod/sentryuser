@@ -73,7 +73,9 @@ class SentryUser extends Eloquent
         $passwordChangeFlag = false;
         
         // checking if we need to change the password or not
-        if ($postData['newPassword'] != '' && $postData['conf'] != '' && $postData['currentPassword'] != '') {
+        if (isset($postData['newPassword']) && $postData['newPassword'] != '' 
+            && isset($postData['conf']) && $postData['conf'] != ''
+            && isset($postData['currentPassword']) && $postData['currentPassword'] != '') {
             if ($this->updateProfilePassword($postData['currentPassword'], $postData['newPassword'], $postData['conf']))
                 $passwordChangeFlag = true;
         }
@@ -212,7 +214,8 @@ class SentryUser extends Eloquent
         ));
         
         DB::table('user_details')->insert(array(
-            'user_id' => $newUser->id
+            'user_id' => $newUser->id,
+            'user_type' => $userData['user_type'],
         ));
         
         $group = Sentry::findGroupById($userData['role']);
@@ -288,7 +291,7 @@ class SentryUser extends Eloquent
             $user = Sentry::findUserByLogin($OAuthData['email']); // get the sentry user object
             Sentry::login($user, true); // log in the user using sentry
             $this->setUserSession($user->id); // setting the session data
-            SentryHelper::setMessage('Logged in. Welcome back123', 'success');
+            SentryHelper::setMessage('Logged in. Welcome back', 'success');
             return true;
         } 
         else {
@@ -304,6 +307,7 @@ class SentryUser extends Eloquent
             // insert extra details about the user
             DB::table('user_details')->insert(array(
                 'user_id' => $newUser->id,
+                'user_type' => 'o-auth',
                 'oauthid' => $OAuthData['id'],
                 'oauth_link' => ($OAuthData['link']) ? $OAuthData['link'] : "",
                 'oauth_pic' => ($OAuthData['picture']) ? $OAuthData['picture'] : "",
