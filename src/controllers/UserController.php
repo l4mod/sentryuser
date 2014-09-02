@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Redirect;
 
 /**
  * Created by PhpStorm.
@@ -220,10 +219,15 @@ class UserController extends BaseController
      * 
      * @param null $id            
      */
-    public function handleEditUser($id = null)
+    public function handleEditUser($id)
     {
         $user = UserHelper::getUserObj($id);
-        $this->layout->content = View::make('sentryuser::edit-profile')->with('userdata', $user)->with('uid', $id);
+        $thisUser = Session::get('userObj');
+        
+        $this->layout->content = View::make('sentryuser::edit-profile')
+        ->with('currUser', $thisUser)
+        ->with('userdata', $user)
+        ->with('uid', $id);
     }
 
     /**

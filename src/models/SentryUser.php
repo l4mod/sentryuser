@@ -88,12 +88,17 @@ class SentryUser extends Eloquent
         else
             $user = Sentry::getUser();
             
-            // set the password only if the flag is true
+        // set the password only if the flag is true
         if ($passwordChangeFlag == true)
             $user->password = $postData['conf'];
         
         $user->first_name = $postData['firstname'];
         $user->last_name = $postData['lastName'];
+        
+        // role update from edit page only when there is a change
+        if (isset($postData['roles']) && $postData['roles'] != $postData['old_group_id']) {
+            $this->changeUserGroup($postData['user_id'], $postData['roles'], $postData['old_group_id']);
+        }
         
         // first check if the module is present
         if (in_array('Amitavroy\Filemanaged\FilemanagedServiceProvider', Config::get('app.providers'))) {
@@ -174,6 +179,19 @@ class SentryUser extends Eloquent
         Event::fire('sentryuser.profilechange', $user);
         
         return true;
+    }
+    
+    private function changeUserGroup($user_id, $new_group_id, $old_group_id)
+    {
+        $thisUser = Sentry::findUserById($user_id);
+        $newGroup = Sentry::findGroupById($new_group_id);
+        $oldGroup = Sentry::findGroupById($old_group_id);
+        
+        // assign the new group
+        $thisUser->addGroup($newGroup);
+        
+        // remove the previous group
+        $thisUser->removeGroup($oldGroup);
     }
 
     public function getUsers($user_id = null)

@@ -40,4 +40,43 @@ class SentryHelper {
         Session::flash('message', $tempMessage);
         Session::flash('message-flag', $flag);
     }
+    
+    /**
+     * This function will generate a drop down from an array and select if we provide the select index.
+     * @param unknown $name
+     * @param unknown $array
+     * @param string $selected
+     * @return string
+     */
+    public static function getDropdownFromArray($name, $array, $selected = null)
+    {
+        $output = "<select name=\"{$name}\" class=\"form-control\">";
+    
+        $output .= "<option value=\"\">SELECT</option>";
+    
+        foreach ($array as $key => $value) {
+            if ($selected != null && $selected == $key) {
+                $output .= "<option value=\"{$key}\" selected>{$value}</option>";
+            } else {
+                $output .= "<option value=\"{$key}\">{$value}</option>";
+            }
+        }
+    
+        $output .= "</select>";
+    
+        return $output;
+    }
+    
+    public static function getGroupsArray()
+    {
+        $groups = Sentry::findAllGroups();
+        
+        $arrGroups = array();
+        
+        foreach ($groups as $group) {
+            $arrGroups[$group->id] = $group->name;
+        }
+        
+        return $arrGroups;
+    }
 }

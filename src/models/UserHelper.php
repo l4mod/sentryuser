@@ -14,7 +14,8 @@ class UserHelper extends Eloquent
     {
         $arrSelect = array(
             'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.created_at', 'users.updated_at',
-            'user_details.user_profile_img','user_details.user_type'
+            'user_details.user_profile_img','user_details.user_type',
+            'groups.name as group_name', 'groups.id as group_id'
         );
         
         $query = DB::table('users');
@@ -23,8 +24,12 @@ class UserHelper extends Eloquent
             $query->select($arrSelect);
         
         $query->leftjoin('user_details', 'user_details.user_id', '=', 'users.id');
+        $query->leftjoin('users_groups', 'users_groups.user_id', '=', 'users.id');
+        $query->leftjoin('groups', 'groups.id', '=', 'users_groups.group_id');
+        
         $query->where('users.activated', 1);
         $query->where('users.id', $user_id);
+        
         $result = $query->first();
         
         if ($result != null)
