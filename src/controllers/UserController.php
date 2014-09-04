@@ -44,7 +44,7 @@ class UserController extends BaseController
      */
     public function handleLoginPage()
     {
-        if (Sentry::check()) {
+        if (Sentry::check() && Session::get('userObj')) {
             return Redirect::to('user/dashboard');
         }
         

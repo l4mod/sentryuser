@@ -46,6 +46,6 @@ Route::group(array(
 
 Route::filter('checkAuth', function ()
 {
-    if (! Sentry::check())
+    if (! Sentry::check() || !Session::get('userObj'))
         return Redirect::to('/');
 });
