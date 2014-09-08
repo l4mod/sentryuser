@@ -41,4 +41,9 @@ return array(
      */
     'login-tpl' => '',
 
+    /**
+     * Set the url of the dashboard where the user will go once he has logged in successfully. This will help not to override the default views of the module.
+     */
+    'dashboard-url' => '',
+
 );

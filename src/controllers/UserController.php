@@ -17,6 +17,14 @@ class UserController extends BaseController
     protected $layout = 'sentryuser::master';
 
     /**
+     * Define the dashboard where the user will be redirected to, 
+     * once he is logging in.
+     * 
+     * @var string
+     */
+    protected $dashboard = 'user/dashboard';
+
+    /**
      * Calling the constructor to execute any code on load of this class.
      */
     public function __construct()
@@ -27,6 +35,9 @@ class UserController extends BaseController
          */
         if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
             $this->layout = Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl');
+
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.dashboard-url') != '')
+            $this->dashboard = Config::get('packages/l4mod/sentryuser/sentryuser.dashboard-url');
     }
 
     /**
@@ -45,7 +56,7 @@ class UserController extends BaseController
     public function handleLoginPage()
     {
         if (Sentry::check() && Session::get('userObj')) {
-            return Redirect::to('user/dashboard');
+            return Redirect::to($this->dashboard);
         }
         
         if (Config::get('packages/l4mod/sentryuser/sentryuser.login-tpl') == '') {
@@ -78,7 +89,8 @@ class UserController extends BaseController
             Event::subscribe($userSubscriber);
             Event::fire('sentryuser.login', array($user));
             
-            return Redirect::to('user/dashboard');
+            // user will be redirected to the configured dashboard.
+            return Redirect::to($this->dashboard);
         } else {
             return Redirect::to('user');
         }
@@ -334,7 +346,7 @@ class UserController extends BaseController
             // checking if the email domain is allowed
             if ($SentryUser->validateOAuthAllowedDomains($result['email'])) {
                 $SentryUser->handleOAuthLogin($result);
-                return Redirect::to('user/dashboard');
+                return Redirect::to($this->dashboard);
             } else {
                 SentryHelper::dsm('This domain is not allowed on this site.', 'warning');
             }
