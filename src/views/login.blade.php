@@ -11,7 +11,7 @@
             <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
         </div>
         <button type="submit" class="btn btn-success">Login</button>
-        <a href="{{url('user/oauth')}}" class="btn btn-info col-md-push1">Login with Focalworks Email</a>
+        <a href="{{url('user/oauth')}}" class="btn btn-info col-md-push1">Login with Google ID</a>
         {{ Form::close() }}
     </div>
 </div>
