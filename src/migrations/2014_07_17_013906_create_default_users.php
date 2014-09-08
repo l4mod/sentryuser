@@ -37,11 +37,11 @@ class CreateDefaultUsers extends Migration {
 
         /*create second user as admin*/
         $user = Sentry::createUser(array(
-                'email'     => 'amitav.roy@focalworks.in',
+                'email'     => 'jhon.doe@gmail.com',
                 'password'  => 'test1234',
                 'activated' => true,
-                'first_name' => 'Amitav',
-                'last_name' => 'FW'
+                'first_name' => 'Jhon',
+                'last_name' => 'Doe'
             ));
 
         $group = Sentry::createGroup(array(

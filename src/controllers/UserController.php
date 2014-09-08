@@ -1,19 +1,28 @@
 <?php
-use Illuminate\Support\Facades\Redirect;
+
 /**
  * Created by PhpStorm.
  * User: Amitav Roy
  * Date: 7/17/14
  * Time: 10:26 AM
  */
-
 class UserController extends BaseController
 {
+
     /**
      * Defining the master layout.
+     * 
      * @var string
      */
     protected $layout = 'sentryuser::master';
+
+    /**
+     * Define the dashboard where the user will be redirected to, 
+     * once he is logging in.
+     * 
+     * @var string
+     */
+    protected $dashboard = 'user/dashboard';
 
     /**
      * Calling the constructor to execute any code on load of this class.
@@ -26,6 +35,9 @@ class UserController extends BaseController
          */
         if (Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl') != '')
             $this->layout = Config::get('packages/l4mod/sentryuser/sentryuser.master-tpl');
+
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.dashboard-url') != '')
+            $this->dashboard = Config::get('packages/l4mod/sentryuser/sentryuser.dashboard-url');
     }
 
     /**
@@ -43,36 +55,43 @@ class UserController extends BaseController
      */
     public function handleLoginPage()
     {
-        $this->layout->menuSkip = true;
-        $this->layout->content = View::make('sentryuser::login');
+        if (Sentry::check() && Session::get('userObj')) {
+            return Redirect::to($this->dashboard);
+        }
+        
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.login-tpl') == '') {
+            $this->layout->menuSkip = true;
+            $this->layout->content = View::make('sentryuser::login');            
+        } else {
+            return View::make(Config::get('packages/l4mod/sentryuser/sentryuser.login-tpl'));
+        }
     }
 
     /**
      * This function is handling the post data from the login page.
+     * 
      * @return mixed
      */
     public function handleUserAuthentication()
     {
         $username = Input::get('email');
         $password = Input::get('password');
-
-        $SentryUser = new SentryUser;
-
-        if ($SentryUser->authenticateUser($username, $password))
-        {
+        
+        $SentryUser = new SentryUser();
+        
+        if ($SentryUser->authenticateUser($username, $password)) {
             SentryHelper::setMessage('Login successful', 'success');
 
             $user = Session::get('userObj'); // getting the user object from session to pass to the event.
-
-            /* firing the login event*/
-            $userSubscriber = new SentryuserEventHandler;
+            
+            /* firing the login event */
+            $userSubscriber = new SentryuserEventHandler();
             Event::subscribe($userSubscriber);
             Event::fire('sentryuser.login', array($user));
-
-            return Redirect::to('user/dashboard');
-        }
-        else
-        {
+            
+            // user will be redirected to the configured dashboard.
+            return Redirect::to($this->dashboard);
+        } else {
             return Redirect::to('user');
         }
     }
@@ -87,6 +106,7 @@ class UserController extends BaseController
 
     /**
      * Handling user logout.
+     * 
      * @return mixed
      */
     public function handleUserLogout()
@@ -108,16 +128,17 @@ class UserController extends BaseController
 
     /**
      * Handling the post from the edit profile form.
+     * 
      * @return mixed
      */
     public function handleSaveProfile()
     {
         $postData = Input::all();
-
+        
         // creating the SentryUser object and calling the edit profile function.
-        $SentryUser = new SentryUser;
+        $SentryUser = new SentryUser();
         $SentryUser->editProfile($postData);
-
+        
         if (isset($postData['user_id']))
             return Redirect::to('user/edit/' . $postData['user_id']);
         else
@@ -131,11 +152,11 @@ class UserController extends BaseController
     {
         // checking the access for the user
         PermApi::access_check('manage_users');
-
-        $SentryUser = new SentryUser;
-
+        
+        $SentryUser = new SentryUser();
+        
         $users = $SentryUser->getUsers()->paginate(10);
-
+        
         $this->layout->content = View::make('sentryuser::user-listing')->with('users', $users);
     }
 
@@ -146,21 +167,22 @@ class UserController extends BaseController
     {
         // checking the access for the user
         PermApi::access_check('create_users');
-
+        
         // get all sentry groups
         $roles = Sentry::findAllGroups();
-
+        
         $this->layout->content = View::make('sentryuser::add-user')->with('roles', $roles);
     }
 
     /**
      * Handling the post data from user save.
+     * 
      * @return mixed
      */
     public function handleUserSave()
     {
         $postData = Input::all();
-
+        
         // message if validation fails
         $messages = array(
             'emailadress.required' => 'We need to know your e-mail address!',
@@ -171,43 +193,49 @@ class UserController extends BaseController
             'password.required' => 'You have to set a password',
             'password.min' => 'Password should be at least 8 characters long',
             'conf.required' => 'Write is again so that you are sure about your password',
-            'conf.matchpass' => 'The two passwords does not match', // this is for the custom validatio that we have written
-        );
-
+            'conf.matchpass' => 'The two passwords does not match' // this is for the custom validatio that we have written
+                );
+        
         // rules for the validation
         $rules = array(
             'fname' => 'required|min:3',
             'lname' => 'required|min:1',
             'password' => 'required|min:8',
             'conf' => 'required|Matchpass:' . $postData["password"],
-            'emailadress' => 'required|email|Checkemailexist',
+            'emailadress' => 'required|email|Checkemailexist'
         );
-
+        
         $validator = Validator::make($postData, $rules, $messages);
-
+        
         // when there are errors in the form
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             // send back to the page with the input data and errors
             SentryHelper::setMessage('Fix the errors.', 'warning'); // setting the error message
             return Redirect::to('user/add')->withInput()->withErrors($validator);
         }
-
+        
+        // when created through form, these users will be normal users.
+        $postData['user_type'] = 'normal';
+        
         // creating new user
-        $SentryUser = new SentryUser;
+        $SentryUser = new SentryUser();
         $SentryUser->addNewUser($postData);
-
+        
         return Redirect::to('user/list');
     }
 
     /**
      * Handling the page for editing a user profile.
-     * @param null $id
+     * 
+     * @param null $id            
      */
-    public function handleEditUser($id = null)
+    public function handleEditUser($id)
     {
         $user = UserHelper::getUserObj($id);
+        $thisUser = Session::get('userObj');
+        
         $this->layout->content = View::make('sentryuser::edit-profile')
+        ->with('currUser', $thisUser)
         ->with('userdata', $user)
         ->with('uid', $id);
     }
@@ -216,54 +244,56 @@ class UserController extends BaseController
      * This is the generic function which will handle bulk operations.
      * Ajax call from jQuery is coming on this page with the action and processing as per option.
      * TODO: This is right now hardcoded to only delete. Need to make it generic.
+     * 
      * @return mixed
      */
     public function entityOperationHandle()
     {
         $postData = Input::all();
-
-        if ($postData['actions'] == '')
-        {
+        
+        if ($postData['actions'] == '') {
             SentryHelper::setMessage('You need to select an action', 'warning');
             return Redirect::to('user/list');
         }
-
+        
         $userIds = array();
-
-        foreach ($postData as $key => $value)
-        {
+        
+        foreach ($postData as $key => $value) {
             $tempArr = explode('-', $key);
             if ($tempArr[0] == 'user')
                 $userIds[] = $tempArr[1];
         }
-
-        switch ($postData['actions'])
-        {
+        
+        switch ($postData['actions']) {
             case 'delete':
-                $SentryUser = new SentryUser;
+                $SentryUser = new SentryUser();
                 $SentryUser->deleteMultipleUser($userIds);
         }
-
+        
         return Redirect::to('user/list');
     }
 
     /**
      * Handling the entity edit ajax requests.
+     * 
      * @return mixed
      */
     public function entityEditHandle()
     {
         $entity = Input::get('entity');
         $entityId = Input::get('entityId');
-
-        switch ($entity)
-        {
+        
+        switch ($entity) {
             case 'user':
-                return Response::json(array('url' => 'user/edit/' . $entityId));
+                return Response::json(array(
+                    'url' => 'user/edit/' . $entityId
+                ));
                 break;
-
+            
             case 'role':
-                return Response::json(array('url' => 'user/role/edit/' . $entityId));
+                return Response::json(array(
+                    'url' => 'user/role/edit/' . $entityId
+                ));
                 break;
         }
     }
@@ -275,19 +305,58 @@ class UserController extends BaseController
     {
         $entity = Input::get('entity');
         $entityId = Input::get('entityId');
-
-        switch ($entity)
-        {
+        
+        switch ($entity) {
             case 'user':
                 $table = 'users';
                 DB::table($table)->where('id', $entityId)->delete();
                 SentryHelper::setMessage('The user has been deleted');
                 break;
-
+            
             case 'role':
-                $SentryPermission =  new SentryPermission;
+                $SentryPermission = new SentryPermission();
                 $SentryPermission->deleteRole($entityId);
                 break;
+        }
+    }
+
+    /**
+     * Handling the OAuth login
+     */
+    public function handleOAuthLogin()
+    {
+        // get data from input
+        $code = Input::get('code');
+        
+        // get google service
+        $googleService = OAuth::consumer('Google');
+        
+        // check if code is valid
+        
+        // if code is provided get user data and sign in
+        if (! empty($code)) {
+            // This was a callback request from google, get the token
+            $token = $googleService->requestAccessToken($code);
+            
+            // Send a request with it
+            $result = json_decode($googleService->request('https://www.googleapis.com/oauth2/v1/userinfo'), true);
+            
+            $SentryUser = new SentryUser();
+            
+            // checking if the email domain is allowed
+            if ($SentryUser->validateOAuthAllowedDomains($result['email'])) {
+                $SentryUser->handleOAuthLogin($result);
+                return Redirect::to($this->dashboard);
+            } else {
+                SentryHelper::dsm('This domain is not allowed on this site.', 'warning');
+            }
+        }         // if not ask for permission first
+        else {
+            // get googleService authorization
+            $url = $googleService->getAuthorizationUri();
+            
+            // return to google login url
+            return Redirect::to((string) $url);
         }
     }
 }

@@ -23,8 +23,12 @@ class UserHelper extends Eloquent
             $query->select($arrSelect);
         
         $query->leftjoin('user_details', 'user_details.user_id', '=', 'users.id');
+        $query->leftjoin('users_groups', 'users_groups.user_id', '=', 'users.id');
+        $query->leftjoin('groups', 'groups.id', '=', 'users_groups.group_id');
+        
         $query->where('users.activated', 1);
         $query->where('users.id', $user_id);
+        
         $result = $query->first();
         
         if ($result != null)
@@ -38,26 +42,29 @@ class UserHelper extends Eloquent
      */
     public static function getUserPicture()
     {
-        // if the file managed module is not present, then no point checking sessions and urls.
-        if (!in_array('Amitavroy\Filemanaged\FilemanagedServiceProvider', Config::get('app.providers')))
-        {
-            return Config::get('sentryuser::sentryuser.default-pic');
-        }
-
         if (Session::has('userObj'))
         {
             $userObj = Session::get('userObj');
 
-            if ($userObj->user_profile_img == "0")
+            // first check if o-auth user profile pic is present.
+            if (isset($userObj->oauth_pic) && $userObj->oauth_pic != '')
             {
-                return Config::get('sentryuser::sentryuser.default-pic');
+                $url = $userObj->oauth_pic;
             }
+
+            // then check if local image is present
+            elseif ($userObj->user_profile_img == "0")
+            {
+                $url = Config::get('sentryuser::sentryuser.default-pic');
+            }
+
             else
             {
                 $fileId = $userObj->user_profile_img;
                 $url = DB::table('files_managed')->select('file_url')->where('file_id', $fileId)->pluck('file_url');
-                return $url;
             }
+
+            return $url;
         }
     }
     

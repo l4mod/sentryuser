@@ -9,6 +9,8 @@ Route::get('access-denied', 'UserController@handleAccessDeniedPage');
 Route::get('user', 'UserController@handleLoginPage');
 Route::post('do-login', 'UserController@handleUserAuthentication');
 
+Route::get('user/oauth', 'UserController@handleOAuthLogin');
+
 /* this section is for authenticated users only */
 Route::group(array(
     'before' => 'checkAuth'
@@ -44,6 +46,6 @@ Route::group(array(
 
 Route::filter('checkAuth', function ()
 {
-    if (! Sentry::check())
+    if (! Sentry::check() || !Session::get('userObj'))
         return Redirect::to('/');
 });

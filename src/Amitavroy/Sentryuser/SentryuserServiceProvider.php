@@ -22,13 +22,11 @@ class SentryuserServiceProvider extends ServiceProvider {
 		$this->package('amitavroy/sentryuser');
         include __DIR__ . '/../../routes.php';
 
-//        \Artisan::add(new ReBaseApp);
-
         // registering my custom validator
         $this->app['validator']->resolver(function($translator, $data, $rules, $messages)
-            {
-                return new CustomValidation($translator, $data, $rules, $messages);
-            });
+        {
+            return new CustomValidation($translator, $data, $rules, $messages);
+        });
 	}
 
 	/**

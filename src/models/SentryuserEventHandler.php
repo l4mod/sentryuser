@@ -8,9 +8,15 @@
 
 class SentryuserEventHandler {
 
-    public function onUserLogin($event)
+    public function onUserLogin($user, $OAuth = null)
     {
-        Log::info('I was here while login');
+        $SentryUser = new SentryUser;
+        $SentryUser->setUserSession($user->id);
+
+        if ($OAuth != null) {
+            // update o-auth data
+            $SentryUser->updateOAuthProfileData($user->id, $OAuth);
+        }
     }
     
     public function onUserProfileChange($user)

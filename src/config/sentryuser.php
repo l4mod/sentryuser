@@ -25,5 +25,25 @@ return array(
      * Set this to a navigation template so that the top navigation menu is replaced.
      */
     'nav-tpl' => '',
+    
+    /**
+     * Use OAuth users
+     */
+    'o-auth' => false,
+    
+    /**
+     * Preferred domain for O Auth
+     */
+    'o-auth-domain' => array('gmail.com', 'focalworks.in'),
+    
+    /**
+     * Set the login 
+     */
+    'login-tpl' => '',
+
+    /**
+     * Set the url of the dashboard where the user will go once he has logged in successfully. This will help not to override the default views of the module.
+     */
+    'dashboard-url' => '',
 
 );
