@@ -26,7 +26,11 @@ class SentryUser extends Eloquent
             );
             
             $user = Sentry::authenticate($credentials, false);
-            $this->setUserSession($user->id);
+            
+            // calling the event of setting user session
+            $subscriber = new SentryuserEventHandler();
+            Event::subscribe($subscriber);
+            Event::fire('sentryuser.login', $user);
             
             return true;
         } catch (Cartalyst\Sentry\Users\LoginRequiredException $e) {
@@ -88,12 +92,17 @@ class SentryUser extends Eloquent
         else
             $user = Sentry::getUser();
             
-            // set the password only if the flag is true
+        // set the password only if the flag is true
         if ($passwordChangeFlag == true)
             $user->password = $postData['conf'];
         
         $user->first_name = $postData['firstname'];
         $user->last_name = $postData['lastName'];
+        
+        // role update from edit page only when there is a change
+        if (isset($postData['roles']) && $postData['roles'] != $postData['old_group_id']) {
+            $this->changeUserGroup($postData['user_id'], $postData['roles'], $postData['old_group_id']);
+        }
         
         // first check if the module is present
         if (in_array('Amitavroy\Filemanaged\FilemanagedServiceProvider', Config::get('app.providers'))) {
@@ -174,6 +183,19 @@ class SentryUser extends Eloquent
         Event::fire('sentryuser.profilechange', $user);
         
         return true;
+    }
+    
+    private function changeUserGroup($user_id, $new_group_id, $old_group_id)
+    {
+        $thisUser = Sentry::findUserById($user_id);
+        $newGroup = Sentry::findGroupById($new_group_id);
+        $oldGroup = Sentry::findGroupById($old_group_id);
+        
+        // assign the new group
+        $thisUser->addGroup($newGroup);
+        
+        // remove the previous group
+        $thisUser->removeGroup($oldGroup);
     }
 
     public function getUsers($user_id = null)
@@ -290,9 +312,11 @@ class SentryUser extends Eloquent
             // user should login
             $user = Sentry::findUserByLogin($OAuthData['email']); // get the sentry user object
             Sentry::login($user, true); // log in the user using sentry
-            $this->setUserSession($user->id); // setting the session data
-            SentryHelper::setMessage('Logged in. Welcome back', 'success');
-            return true;
+            
+            // calling the event of setting user session
+            $subscriber = new SentryuserEventHandler();
+            Event::subscribe($subscriber);
+            Event::fire('sentryuser.login', array($user, $OAuthData));
         } 
         else {
             // creating the user
@@ -309,10 +333,10 @@ class SentryUser extends Eloquent
                 'user_id' => $newUser->id,
                 'user_type' => 'o-auth',
                 'oauthid' => $OAuthData['id'],
-                'oauth_link' => ($OAuthData['link']) ? $OAuthData['link'] : "",
-                'oauth_pic' => ($OAuthData['picture']) ? $OAuthData['picture'] : "",
-                'gender' => ($OAuthData['gender']) ? $OAuthData['gender'] : "",
-                'locale' => ($OAuthData['locale']) ? $OAuthData['locale'] : "",
+                'oauth_link' => (isset($OAuthData['link'])) ? $OAuthData['link'] : "",
+                'oauth_pic' => (isset($OAuthData['picture'])) ? $OAuthData['picture'] : "",
+                'gender' => (isset($OAuthData['gender'])) ? $OAuthData['gender'] : "",
+                'locale' => (isset($OAuthData['locale'])) ? $OAuthData['locale'] : "",
             ));
             
             // assign the group to the user
@@ -322,10 +346,21 @@ class SentryUser extends Eloquent
             // login in the user
             $user = Sentry::findUserById($newUser->id); // get the sentry user object
             Sentry::login($user, true); // log in the user using sentry
-            $this->setUserSession($user->id); // setting the session data
+            
+            // calling the event of setting user session
+            $subscriber = new SentryuserEventHandler();
+            Event::subscribe($subscriber);
+            Event::fire('sentryuser.login', array($user, $OAuthData));
             
             SentryHelper::setMessage('Welcome to Focalworks Intranet', 'success');
             return true;
         }
+    }
+    
+    public function updateOAuthProfileData($uid, $OAuthData)
+    {
+        DB::table('user_details')->where('user_id', $uid)->update(array(
+                'oauth_pic' => (isset($OAuthData['picture'])) ? $OAuthData['picture'] : "",
+            ));
     }
 }

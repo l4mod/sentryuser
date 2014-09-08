@@ -1,5 +1,4 @@
 <?php
-use Illuminate\Support\Facades\Redirect;
 
 /**
  * Created by PhpStorm.
@@ -45,11 +44,16 @@ class UserController extends BaseController
      */
     public function handleLoginPage()
     {
-        if (Sentry::check()) {
+        if (Sentry::check() && Session::get('userObj')) {
             return Redirect::to('user/dashboard');
         }
-        $this->layout->menuSkip = true;
-        $this->layout->content = View::make('sentryuser::login');
+        
+        if (Config::get('packages/l4mod/sentryuser/sentryuser.login-tpl') == '') {
+            $this->layout->menuSkip = true;
+            $this->layout->content = View::make('sentryuser::login');            
+        } else {
+            return View::make(Config::get('packages/l4mod/sentryuser/sentryuser.login-tpl'));
+        }
     }
 
     /**
@@ -66,15 +70,13 @@ class UserController extends BaseController
         
         if ($SentryUser->authenticateUser($username, $password)) {
             SentryHelper::setMessage('Login successful', 'success');
-            
+
             $user = Session::get('userObj'); // getting the user object from session to pass to the event.
             
             /* firing the login event */
             $userSubscriber = new SentryuserEventHandler();
             Event::subscribe($userSubscriber);
-            Event::fire('sentryuser.login', array(
-                $user
-            ));
+            Event::fire('sentryuser.login', array($user));
             
             return Redirect::to('user/dashboard');
         } else {
@@ -215,10 +217,15 @@ class UserController extends BaseController
      * 
      * @param null $id            
      */
-    public function handleEditUser($id = null)
+    public function handleEditUser($id)
     {
         $user = UserHelper::getUserObj($id);
-        $this->layout->content = View::make('sentryuser::edit-profile')->with('userdata', $user)->with('uid', $id);
+        $thisUser = Session::get('userObj');
+        
+        $this->layout->content = View::make('sentryuser::edit-profile')
+        ->with('currUser', $thisUser)
+        ->with('userdata', $user)
+        ->with('uid', $id);
     }
 
     /**
@@ -316,7 +323,6 @@ class UserController extends BaseController
         
         // if code is provided get user data and sign in
         if (! empty($code)) {
-            
             // This was a callback request from google, get the token
             $token = $googleService->requestAccessToken($code);
             
