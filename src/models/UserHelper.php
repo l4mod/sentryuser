@@ -14,8 +14,7 @@ class UserHelper extends Eloquent
     {
         $arrSelect = array(
             'users.id', 'users.email', 'users.first_name', 'users.last_name', 'users.created_at', 'users.updated_at',
-            'user_details.user_profile_img','user_details.user_type', 'user_details.oauth_pic',
-            'groups.name as group_name', 'groups.id as group_id'
+            'user_details.user_profile_img'
         );
         
         $query = DB::table('users');
