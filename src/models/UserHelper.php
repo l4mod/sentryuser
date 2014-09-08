@@ -47,7 +47,7 @@ class UserHelper extends Eloquent
             $userObj = Session::get('userObj');
 
             // first check if o-auth user profile pic is present.
-            if ($userObj->oauth_pic != '')
+            if (isset($userObj->oauth_pic) && $userObj->oauth_pic != '')
             {
                 $url = $userObj->oauth_pic;
             }
